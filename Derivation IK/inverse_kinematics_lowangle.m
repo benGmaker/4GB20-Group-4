@@ -12,18 +12,22 @@ L7 = 65;
 L8 = 50;
 
 %% Equations
+% expression of r
 er1 = L3*cos(Rx) + L4*cos(R1) + L7*cos(R2);
 er2 = L5*cos(Rz) + (L6+L7)*cos(R2);
 eqnr = er1 == er2;
 
+% expression of z
 ez1 = L1 + L3*sin(Rx) + L4*sin(R1) - L7*sin(R2) - L8;
 ez2 = L1 + L2 + L5*sin(Rz) - (L6 + L7)*sin(R2) - L8;
 eqnz = ez1 == ez2;
 
+% solve both expressions for R1 and R2
 [solR1 solR2] = solve([eqnr, eqnz], [R1, R2]);
 sR1 = simplify(solR1);
 sR2 = simplify(solR2);
 
+% substitute in original expressions (you can choose either er1 or er2, same for ez. These should be the same)
 er1 = subs(er1, [R1, R2], [sR1(2), sR2(2)]);
 er2 = subs(er2, R2, sR2(2));
 
