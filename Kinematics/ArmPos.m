@@ -36,7 +36,27 @@ classdef ArmPos
         
        function obj = setD(obj)
             obj.D = [obj.C(1),obj.C(2)-obj.L8];
+       end
+        
+        function obj = draw(obj)
+           fig = figure();
+           clf;
+           hold on
+           plot([0,obj.X(1)],[0,obj.X(2)],'r'); %origin to X
+           plot([obj.X(1),obj.Z(1)],[obj.X(2),obj.Z(2)],'r'); %X-Z
+           plot([obj.E(1),obj.X(1)],[obj.E(2),obj.X(2)],'b');%EX
+           plot([obj.E(1),obj.B(1)],[obj.E(2),obj.B(2)],'b');%EB
+           plot([obj.A(1),obj.Z(1)],[obj.A(2),obj.Z(2)],'b');%AZ
+           plot([obj.A(1),obj.B(1)],[obj.A(2),obj.B(2)],'g');%AB
+           plot([obj.B(1),obj.C(1)],[obj.B(2),obj.C(2)],'g');%BC
+           plot([obj.C(1),obj.D(1)],[obj.C(2),obj.D(2)],'g');%CD
         end
+        
+        
+    end
+    
+    methods (Static)
+
         
     end
     
