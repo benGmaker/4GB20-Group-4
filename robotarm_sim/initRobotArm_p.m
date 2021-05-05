@@ -8,19 +8,25 @@ initialAngleKrukX = 0.809091366467325; % [rad]
 initialAngleKrukZ = 0.025113778764355; % [rad]
 
 %% Trajectory
-t_sim = 100;
-n = t_sim*fs;
+% Time vector
+t_sim = 100;    % [s] Simulation duration (SHOULD BE EQUAL TO VALUE IN SIMULINK)
+n = t_sim*fs;   % [-] Number of samples (based on sampling frequency)
 
 t = 0:t_sim/n:t_sim;
+
+% Example Trajectory for R, X, and Z (To be run with feedback)
 % R = linspace(-pi/4, pi/4,   n+1);
 % X = linspace(0.1,   1.2,    n+1);
 % Z = linspace(-0.3,  0.2,    n+1);
 
-w = 2*pi*10;
-R = sin(w*t);
-X = linspace(0,   0,    n+1);
-Z = linspace(0,  0,    n+1);
+% Sine sweep for system identification
+R = 0.3*chirp(t, 0.1, t(end), 200); % Sine sweep
+R = sin(2*pi*20*t);                 % Just a sine for validation
+X = linspace(0,   0,    n+1);       % Keep this constant for now
+Z = linspace(0,  0,    n+1);        % Keep this constant for now
 
-ref_R = timeseries(R,t);
-ref_X = timeseries(X,t);
-ref_Z = timeseries(Z,t);
+% Turn into timeseries for Simulink
+ref_R = timeseries(R',t);
+ref_X = timeseries(X',t);
+ref_Z = timeseries(Z',t);
+
