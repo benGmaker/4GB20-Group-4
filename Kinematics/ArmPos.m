@@ -47,7 +47,7 @@ classdef ArmPos
         
         function obj = ACtoB(obj)
             %computes the position of point B from A and C 
-            c = obj.L6 + obj.L7;
+            c = obj.distance(obj.A,obj.C);
             a = abs(obj.A(1) - obj.C(1));
             b = abs(obj.A(2) - obj.C(2));
             f = obj.L6/c;
@@ -57,6 +57,72 @@ classdef ArmPos
             Br = obj.A(1) + x;
             Bz = obj.A(2) - y;
             obj.B = [Br,Bz];
+        end
+        
+        function [obj, error] = phiZXtoFullpos(obj, verbose)
+            error = false;
+            %computes all of the coordinates from phiZ and phiX
+            obj.A = obj.L5 * [cos(obj.phiZ),sin(obj.phiZ)] + obj.Z;
+            obj.E = obj.L3 * [cos(obj.phiX),sin(obj.phiX)] + obj.X;
+            
+            [Bpos, failed] = CircCirc(obj.A,obj.E,obj.L6,obj.L4,verbose);
+            if failed == true
+                if (verbose)
+                    %this can happen quite a lot so this is only printed in
+                    %verbose mode
+                    disp("impossible pos");
+                end
+                error = true;
+                return
+            end
+            correctPosCount = 0;
+            for i=1:2
+               obj.B = Bpos(i,:);
+             
+               obj = obj.getPhi1();
+               %{
+               %Uncomment to draw possible solutions for B
+               obj = obj.setD;
+               obj.draw()
+               %}
+               if obj.checkPhi1() == false %if this does not fail it means that phi1 is valid
+                   correctObj = obj;
+                   correctPosCount = correctPosCount + 1;
+                   if correctPosCount == 2
+                       %this is something we always want to print because
+                       %this should basically never happen
+                       disp("two correct pos found at" +obj.phiX + ' and ' + obj.phiZ);
+                   end
+                   if verbose
+                       disp("correct pos found");
+                   end
+                   continue 
+               end
+            end
+            
+            if correctPosCount == 0
+                error = true;
+                if verbose
+                    disp("no correct position found");
+                end
+                return
+            end
+            obj = correctObj;
+            obj = obj.ABtoC;
+            obj = obj.setD; %computing D
+        end
+        
+        function obj = ABtoC(obj)
+            phi = obj.getAngle(obj.A,obj.B);
+            %{ 
+            %Alternate way of calculating phi
+            P1 = obj.A;
+            P2 = obj.B;
+            h = P2(2)-P1(2);
+            w = P2(1)-P1(1);
+            phi = atan(h/w);
+            %}
+            obj.C = obj.B + obj.L7*[cos(phi),sin(phi)];
         end
         
         function obj = draw(obj)
@@ -83,7 +149,7 @@ classdef ArmPos
         
         function obj = getPhi1(obj)
             theta = obj.getAngle(obj.E,obj.B);
-            obj.phi1 = obj.phiX - theta;
+            obj.phi1 = theta - obj.phiX;
         end
         
         function obj = getAngles(obj)
@@ -109,26 +175,31 @@ classdef ArmPos
                succes = false;
             end
             
-            if obj.distance(obj.E,obj.X) ~= obj.L3
+            EX = obj.distance(obj.E,obj.X);
+            if round(EX) ~= obj.L3
                 disp("|EX| != L3");
                 succes = false;
             end
             
-            if obj.distance(obj.B,obj.E) ~= obj.L4
+            BE = obj.distance(obj.B,obj.E);
+            if round(BE) ~= obj.L4
                 disp("|BE| != L4");
                 succes = false;
             end
-            if obj.distance(obj.Z,obj.A) ~= obj.L5
+            AZ = obj.distance(obj.Z,obj.A);
+            if round(AZ) ~= obj.L5
                 disp("|AZ| != L5");
                 succes = false;
             end
             
-            if obj.distance(obj.A,obj.B) ~= obj.L6
+            AB = obj.distance(obj.A,obj.B);
+            if round(AB) ~= obj.L6
                 disp("|AB| != L6");
                 succes = false;
             end
             
-            if obj.distance(obj.B,obj.C) ~= obj.L7
+            BC = obj.distance(obj.B,obj.C);
+            if round(BC) ~= obj.L7
                 disp("|BC| != L7");
                 succes = false;
             end
@@ -152,11 +223,21 @@ classdef ArmPos
         end
         
         function failure = checkPhi1(obj)
-            if obj.phi1 >= 0
-                failure = false;
-            else
+            %returns true if phi1 is in the wrong position or if the arm EB
+            %is in an impossible position (needs further improvements)
+            failure = false;
+            if abs(obj.phi1) > pi/2
                 failure = true;
-            end 
+                return
+            end
+            
+            %if point B is behind point E the position is impossible
+            if obj.B(1) < obj.E(1)+5
+                failure = true;
+                return
+            end
+            
+            
         end
         
     end
