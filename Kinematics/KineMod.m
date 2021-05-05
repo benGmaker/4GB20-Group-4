@@ -13,11 +13,13 @@ classdef KineMod %KinematicModel
     
     properties 
         %Variable properties of the kinematic model
-        phiXmin = 0;
-        phiXmax = 90;
-        phiZmin = 0;
-        phiYmax = 10;
-        CurrentPos;
+        phiXmin = -10;
+        phiXmax = 140;
+        phiZmin = -45;
+        phiZmax = 80;
+        Positions;
+        PrevPos;
+        CurPos; 
     end
     
     methods %Functions that can change the variable properties of the kinematic model
