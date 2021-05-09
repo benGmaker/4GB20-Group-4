@@ -2,7 +2,6 @@
 fs = 2048;
 Ts = 1/fs;
 
-nSamplesForVisualization = 200;
 
 initialAngleKrukX = 0.809091366467325; % [rad]
 initialAngleKrukZ = 0.025113778764355; % [rad]
@@ -20,9 +19,6 @@ t = 0:t_sim/n:t_sim;
 % Z = linspace(-0.3,  0.2,    n+1);
 
 % Sine sweep for system identification
-R = 0.3*chirp(t, 0.1, t(end), 200); % Sine sweep
-R = sin(2*pi*20*t);                 % Just a sine for validation
-X = linspace(0,   0,    n+1);       % Keep this constant for now
 Z = linspace(0,  0,    n+1);        % Keep this constant for now
 
 % Turn into timeseries for Simulink
