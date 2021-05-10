@@ -3,7 +3,7 @@ function [result, error] = CircCirc (C1, C2, R1, R2, verbose)
 %https://stackoverflow.com/questions/3349125/circle-circle-intersection-points#:~:text=Intersection%20of%20two%20circles&text=First%20calculate%20the%20distance%20d,is%20contained%20within%20the%20other.
     error = false;
     result = [];
-    d = ( (C1(1)-C2(1))^2 + (C1(2)-C2(2))^2 )^0.5; %distance between the two circles
+    d = distance(C1,C2); %distance between the two circles
     if d == R1+R2
         if verbose
             disp("Only 1 intersection point")

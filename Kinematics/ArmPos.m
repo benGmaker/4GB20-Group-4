@@ -42,21 +42,24 @@ classdef ArmPos
         end 
         
         function obj = setD(obj)
+            %computes the position of D given 
             obj.D = [obj.C(1),obj.C(2)-obj.L8];
         end
         
         function obj = ACtoB(obj)
             %computes the position of point B from A and C 
-            c = obj.distance(obj.A,obj.C);
+            
+            c = distance(obj.A,obj.C);
             a = abs(obj.A(1) - obj.C(1));
             b = abs(obj.A(2) - obj.C(2));
             f = obj.L6/c;
             x = a*f;
             y = b*f;
-            
-            Br = obj.A(1) + x;
+            sign_a = sign(obj.A(1) - obj.C(1));
+            Br = obj.A(1) - sign_a * x;
             Bz = obj.A(2) - y;
             obj.B = [Br,Bz];
+            
         end
         
         function [obj, error] = phiZXtoFullpos(obj, verbose)
@@ -85,7 +88,7 @@ classdef ArmPos
                obj = obj.setD;
                obj.draw()
                %}
-               if obj.checkPhi1() == false %if this does not fail it means that phi1 is valid
+               if obj.checkPhi1() %if phi1 is oke than we have a valid B position
                    correctObj = obj;
                    correctPosCount = correctPosCount + 1;
                    if correctPosCount == 2
@@ -137,6 +140,8 @@ classdef ArmPos
             plot([obj.A(1),obj.B(1)],[obj.A(2),obj.B(2)],'g');%AB
             plot([obj.B(1),obj.C(1)],[obj.B(2),obj.C(2)],'g');%BC
             plot([obj.C(1),obj.D(1)],[obj.C(2),obj.D(2)],'g');%CD
+            xlim([-10,350]);
+            ylim([-10,350]);
         end
         
         function obj = getPhiX(obj)
@@ -158,82 +163,107 @@ classdef ArmPos
             obj = obj.getPhi1();
         end
         
-        function succes = validate(obj)
+        function succes = validate(obj, verbose)
             %this function checks if the robot arm has a valid position
             %given the constraints
+            succes = true;
             obj.getAngles;
-            if obj.checkPhiZ()
-                disp("Phi Z is incorrect");
+            if obj.checkPhiZ() == false
+                if verbose
+                    disp("Phi Z is incorrect");
+                end
                 succes = false;
             end
-            if obj.checkPhiX()
-                disp("Phi X is incorrect");
+            if obj.checkPhiX() == false
+                if verbose
+                    disp("Phi X is incorrect");
+                end
                 succes = false;
             end
-            if obj.checkPhi1()
-               disp("phi 1 is incorrect");
-               succes = false;
+            if obj.checkPhi1() == false
+                if verbose
+                    disp("phi 1 is incorrect");
+                end
+                succes = false;
             end
             
-            EX = obj.distance(obj.E,obj.X);
+            EX = distance(obj.E,obj.X);
             if round(EX) ~= obj.L3
-                disp("|EX| != L3");
+                if verbose
+                    disp("|EX| != L3");
+                end
                 succes = false;
             end
             
-            BE = obj.distance(obj.B,obj.E);
+            BE = distance(obj.B,obj.E);
             if round(BE) ~= obj.L4
-                disp("|BE| != L4");
+                if verbose
+                    disp("|BE| != L4");
+                end
                 succes = false;
             end
-            AZ = obj.distance(obj.Z,obj.A);
+            AZ = distance(obj.Z,obj.A);
             if round(AZ) ~= obj.L5
-                disp("|AZ| != L5");
+                if verbose
+                    disp("|AZ| != L5");
+                end
                 succes = false;
             end
             
-            AB = obj.distance(obj.A,obj.B);
+            AB = distance(obj.A,obj.B);
             if round(AB) ~= obj.L6
-                disp("|AB| != L6");
+                if verbose
+                    disp("|AB| != L6");
+                end
                 succes = false;
             end
             
-            BC = obj.distance(obj.B,obj.C);
+            BC = distance(obj.B,obj.C);
             if round(BC) ~= obj.L7
-                disp("|BC| != L7");
+                if verbose 
+                    disp("|BC| != L7");
+                end
+                succes = false;
+            end
+            
+            CD = distance(obj.C,obj.D);
+            if round(CD) ~= obj.L8
+                if verbose 
+                    disp("|CD| != L8");
+                end
                 succes = false;
             end
                 
         end
         
-        function failure = checkPhiZ(obj)
-            if (obj.phiZ >= obj.phiZmin) && (obj.phiZ <= obj.phiZmax)
-                failure = false;
+        function succes = checkPhiZ(obj)
+            if (obj.phiZ >= obj.phiZmin/360*2*pi) && (obj.phiZ <= obj.phiZmax/360*2*pi)
+                succes = true;
             else
-                failure = true;
+                succes = false;
             end 
         end
         
-        function failure = checkPhiX(obj)
-            if (obj.phiX >= obj.phiXmin) && (obj.phiX <= obj.phiXmax)
-                failure = false;
+        function succes = checkPhiX(obj)
+            if (obj.phiX >= obj.phiXmin/360*2*pi) && (obj.phiX <= obj.phiXmax/360*2*pi)
+                succes = true;
             else
-                failure = true;
+                succes = false;
             end 
         end
         
-        function failure = checkPhi1(obj)
+        function succes = checkPhi1(obj)
             %returns true if phi1 is in the wrong position or if the arm EB
             %is in an impossible position (needs further improvements)
-            failure = false;
+            succes = true;
             if abs(obj.phi1) > pi/2
-                failure = true;
+                succes = false;
                 return
             end
             
             %if point B is behind point E the position is impossible
             if obj.B(1) < obj.E(1)+5
-                failure = true;
+                succes = false;
                 return
             end
             
@@ -243,10 +273,6 @@ classdef ArmPos
     end
     
     methods (Static)
-        function d = distance(P1,P2)
-             d = ( (P1(1)-P2(1))^2 + (P1(2)-P2(2))^2 )^0.5;
-        end
-        
         function finalphi = getAngle(P1,P2)
             h = P2(2)-P1(2);
             w = P2(1)-P1(1);
