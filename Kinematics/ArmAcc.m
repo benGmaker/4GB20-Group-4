@@ -6,6 +6,7 @@ classdef ArmAcc
     
     properties 
         dt = 0;
+        ddtheta = 0;
         ddA = [0,0];
         ddB = [0,0];
         ddC = [0,0];
@@ -23,6 +24,7 @@ classdef ArmAcc
         end
         
         function obj = deltaV(obj,v1,v2)
+            obj.ddtheta = (v2.dtheta - v1.dtheta)/obj.dt;
             obj.ddA = (v2.dA - v1.dA)/obj.dt;
             obj.ddB = (v2.dB - v1.dB)/obj.dt;
             obj.ddC = (v2.dC - v1.dC)/obj.dt;

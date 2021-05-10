@@ -6,7 +6,7 @@ classdef ArmVel
     
     properties 
         dt = 0;
-        
+        dtheta = 0;
         dA = [0,0];
         dB = [0,0];
         dC = [0,0];
@@ -24,6 +24,7 @@ classdef ArmVel
         end
         
         function obj = deltaPos(obj,pos1,pos2)
+            obj.dtheta = (pos2.theta - pos1.theta)/obj.dt;
             obj.dA = (pos2.A - pos1.A)/obj.dt;
             obj.dB = (pos2.B - pos1.B)/obj.dt;
             obj.dC = (pos2.C - pos1.C)/obj.dt;

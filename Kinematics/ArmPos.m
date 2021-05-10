@@ -26,6 +26,7 @@ classdef ArmPos
     properties 
         %all the variables describing all the positions of the joints
         %_ = [r,z]
+        theta = 0;
         A = [0,0];
         B = [0,0];
         C = [0,0];
