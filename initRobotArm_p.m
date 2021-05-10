@@ -23,8 +23,13 @@ f = fs/max(t);
 % Sine sweep for system identification
 % R = 0.3*chirp(t, 0.1, t(end), 200); % Sine sweep
 % R = 0.6*sin(2*pi*20*t);                 % Just a sine for validation
-R = sign(sin(2*pi*t*f/4));
-X = linspace(0,   0,    n+1);       % Keep this constant for now
+%R = sign(sin(2*pi*t*f/4));
+R = linspace(0,   0,    n+1);
+%X = 0.2*sign(sin(2*pi*t*f/4));        %square sin
+X= 0.2*square(linspace(0,  f/4 ,  n+1)-pi)+0.2;   % step input (from 0 to 0.4) in the positive axis
+%X = linspace(0.1,   0.8,    n+1);
+%plot(X)
+
 Z = linspace(0,  0,    n+1);        % Keep this constant for now
 
 % Turn into timeseries for Simulink
