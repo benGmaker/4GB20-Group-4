@@ -1,12 +1,14 @@
-function path = LinearPath(point1,point2,nsteps)
-    r = linspace(point1(1), point2(1), nsteps);
-    z = linspace(point1(2), point2(2), nsteps);
+function path = LinearPath(pos1,pos2,nsteps)
+    r = linspace(pos1.D(1), pos2.D(1), nsteps);
+    z = linspace(pos1.D(2), pos2.D(2), nsteps);
+    theta = linspace(pos1.theta, pos2.theta, nsteps);
 
-    posArray = ArmPos.empty([0,n]);
+    path = ArmPos.empty([0,nsteps]);
     for i=1:nsteps
-        posArray(i) = ArmPos;
-        posArray(i).D = [r(i),z(i)];
-        posArray(i) = posArray(i).DtoC();
-        posArray(i) = KineMod.IK_MAU(posArray(i).C);
+        path(i) = ArmPos;
+        path(i).D = [r(i),z(i)];
+        path(i).theta = theta(i);
+        path(i) = path(i).DtoC();
+        path(i) = KineMod.IK_MAU(path(i).C,false);
     end
 end
