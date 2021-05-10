@@ -14,10 +14,12 @@ classdef ArmPos
         L8 = 50;
         X = [0,81]; %=[0,L1]
         Z = [0,246]; %=[0,L1+L2]
-        phiXmin = -10;
-        phiXmax = 140;
-        phiZmin = -45;
-        phiZmax = 80;
+        phiXmin = 0.2;
+        phiXmax = pi/2-0.1;
+        phiZmin = -0.4;
+        phiZmax = 0.3;
+        phi1min = -pi/4;
+        phi1max = pi/4;
     end
     
     %object for describing the current position of the arm
@@ -237,7 +239,7 @@ classdef ArmPos
         end
         
         function succes = checkPhiZ(obj)
-            if (obj.phiZ >= obj.phiZmin/360*2*pi) && (obj.phiZ <= obj.phiZmax/360*2*pi)
+            if (obj.phiZ >= obj.phiZmin) && (obj.phiZ <= obj.phiZmax)
                 succes = true;
             else
                 succes = false;
@@ -245,7 +247,7 @@ classdef ArmPos
         end
         
         function succes = checkPhiX(obj)
-            if (obj.phiX >= obj.phiXmin/360*2*pi) && (obj.phiX <= obj.phiXmax/360*2*pi)
+            if (obj.phiX >= obj.phiXmin) && (obj.phiX <= obj.phiXmax)
                 succes = true;
             else
                 succes = false;
@@ -256,8 +258,11 @@ classdef ArmPos
             %returns true if phi1 is in the wrong position or if the arm EB
             %is in an impossible position (needs further improvements)
             succes = true;
-            if abs(obj.phi1) > pi/2
-                succes = false;
+            
+            if (obj.phi1 >= obj.phi1min) && (obj.phi1 <= obj.phi1max)
+                succes = true;
+            else
+                succes = false; 
                 return
             end
             
