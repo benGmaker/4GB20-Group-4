@@ -20,14 +20,14 @@ classdef KineMod %KinematicModel
         PrevPos; %array or single value which contains history of positions
         CurPos; 
     end
-    
+    %{
     methods %Functions that can change the variable properties of the kinematic model
         function obj = KineMod()
             %This is the constructor class, here the variable properties of
             %the kinematic model can be set for the first time
         end
     end
-    
+    %}
     methods (Static) %function that cannot change the variable properties (state) of
         %kinematic model
         function pos = IK_MAU(C_coord,verbose)
