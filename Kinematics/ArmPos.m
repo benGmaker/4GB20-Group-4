@@ -48,6 +48,10 @@ classdef ArmPos
             obj.D = [obj.C(1),obj.C(2)-obj.L8];
         end
         
+        function obj = DtoC(obj)
+            obj.C = [obj.D(1),obj.D(2)+obj.L8];
+        end
+        
         function obj = ACtoB(obj)
             %computes the position of point B from A and C 
             
