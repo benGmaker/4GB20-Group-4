@@ -18,8 +18,8 @@ classdef ArmPos
         phiXmax = pi/2-0.1;
         phiZmin = -0.4;
         phiZmax = 0.3;
-        phi1min = -pi/4;
-        phi1max = pi/4;
+        phi1min = -pi*3/4;
+        phi1max = pi*3/4;
     end
     
     %object for describing the current position of the arm
