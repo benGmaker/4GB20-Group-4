@@ -9,7 +9,7 @@ L4 = 130;
 L5 = 130;
 L6 = 120;
 L7 = 65;
-L8 = 50;
+L8 = 28;
 
 %% Equations
 er1 = L3*sin(Rxa) + L4*cos(R1) + L7*cos(R2);
