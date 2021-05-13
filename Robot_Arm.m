@@ -99,7 +99,7 @@ end
 %% Figuuuur
 figure()
 hold on
-plot(1:a,A)
-plot(1:a,B)
-plot(1:a,phiR)
+plot(1:(length(Rx)-1)*n,phiX)
+plot(1:(length(Rx)-1)*n,phiZ)
+plot(1:(length(Rx)-1)*n,phiR)
 legend('phiX','phiZ','phiR')
