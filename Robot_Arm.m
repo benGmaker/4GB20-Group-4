@@ -26,27 +26,29 @@ pause()
 
  
 
-alpha = 10; % offset from the plate
+alpha = 80; % offset from the plate
 beta = 0; % offset from center line of the plate (calibration line) (minus for offset to the source grid)
 
  
 
-initR = 200;
-initTheta = 0;
-initZ = 10;
-z = 20;
+r_init = 240;
+theta_init = 0;
+z_init = 45;
+z_pickup = 24;
+z_moving = 50;
 
  
 
 %%
-[r_s,theta_s] = distance_and_angle(source, 'source', alpha, beta)
-[r_p,theta_p] = distance_and_angle(print, 'print', alpha, beta)
+[r_s,theta_s] = distance_and_angle(source, 'source', alpha, beta);
+[r_p,theta_p] = distance_and_angle(print, 'print', alpha, beta);
+theta_s = deg2rad(theta_s);
+theta_p = deg2rad(theta_p);
 
- 
 
 %% Path
-CoordinatePath = PositionsToArray(initR,initTheta,initZ,r_s,theta_s,r_p,theta_p,z);
-[Rx, Rz] = fcn_IK(CoordinatePath(:,1), CoordinatePath(:,3), IK);
+CoordinatePath = PositionsToArray(r_init,theta_init,z_init,r_s,theta_s,r_p,theta_p,z_pickup,z_moving);
+[Rx, Rz] = fcn_IK(CoordinatePath(1,:), CoordinatePath(3,:), IK);
 % startPos = ArmPos;
 % startPos.D = [220,40];
 % startPos.theta = 10;
@@ -58,37 +60,46 @@ CoordinatePath = PositionsToArray(initR,initTheta,initZ,r_s,theta_s,r_p,theta_p,
 % FourStopLinearPath(startPos,endPos,50)
 
 %% Inverse kinematics
-
- 
-i=1;
-% for i=1:length(Rx)-1
- 
-pos(1) = ArmPos;
-pos(1).phiX = Rx(i);
-pos(1).phiZ = Rz(i);
-pos(1) = pos(1).phiZXtoFullpos(false);
-
-pos(2) = ArmPos;
-pos(2).phiX = Rx(i+1);
-pos(2).phiZ = Rz(i+1);
-pos(2) = pos(2).phiZXtoFullpos(false);
-
-n = 2048;
-r = linspace(pos(1).D(1), pos(2).D(1), n);
-z = linspace(pos(1).D(2), pos(2).D(2), n);
-% r = linspace(CoordinatePath(1,i), CoordinatePath(1,i+1), n);
-% z = linspace(CoordinatePath(3,i), CoordinatePath(3,i+1), n);
-
 tic
-posArray = ArmPos.empty([0,n]);
+n = 2048;
+posArray = ArmPos.empty([0,n*(length(Rx)-1)]);
+phiR=[];
+for i=1:length(Rx)-1
+    
+pos(2*(i-1)+1) = ArmPos;
+pos(2*(i-1)+1).phiX = Rx(i);
+pos(2*(i-1)+1).phiZ = Rz(i);
+pos(2*(i-1)+1) = pos(2*(i-1)+1).phiZXtoFullpos(false);
+
+pos(2*(i-1)+2) = ArmPos;
+pos(2*(i-1)+2).phiX = Rx(i+1);
+pos(2*(i-1)+2).phiZ = Rz(i+1);
+pos(2*(i-1)+2) = pos(2*(i-1)+2).phiZXtoFullpos(false);
+
+
+r = linspace(pos(2*(i-1)+1).D(1), pos(2*(i-1)+2).D(1), n);
+z = linspace(pos(2*(i-1)+1).D(2), pos(2*(i-1)+2).D(2), n);
+phiR=[phiR,linspace(CoordinatePath(2,i), CoordinatePath(2,i+1),n)];
+
+
 for j=1:n
-    posArray(j) = ArmPos;
-    posArray(j).D = [r(j),z(j)];
-    posArray(j) = posArray(j).DtoC();
-    posArray(j) = KineMod.IK_MAU(posArray(j).C,false);
+    posArray(n*(i-1)+j) = ArmPos;
+    posArray(n*(i-1)+j).D = [r(j),z(j)];
+    posArray(n*(i-1)+j) = posArray(n*(i-1)+j).DtoC();
+    posArray(n*(i-1)+j) = KineMod.IK_MAU(posArray(n*(i-1)+j).C,false);
+end
+
 end
 toc
 
- 
-
-% end
+for i=1:(length(Rx)-1)*n
+    phiX(i) = posArray(i).phiX;
+    phiZ(i) = posArray(i).phiZ;
+end
+%% Figuuuur
+figure()
+hold on
+plot(1:a,A)
+plot(1:a,B)
+plot(1:a,phiR)
+legend('phiX','phiZ','phiR')
