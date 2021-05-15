@@ -28,7 +28,7 @@ pause()
 %% Calibration
 % This needs to be automatically adjusted by calibration.
 
-alpha = 80; % offset from the plate
+alpha = 100; % offset from the plate
 beta = 0; % offset from center line of the plate (calibration line) (minus for offset to the source grid)
 
 % r_init = 200;       % Initial r of the EE
