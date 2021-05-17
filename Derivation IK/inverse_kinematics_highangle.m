@@ -9,7 +9,7 @@ L4 = 130;
 L5 = 130;
 L6 = 120;
 L7 = 65;
-L8 = 28;
+L8 = 35.6;
 
 %% Equations
 er1 = L3*sin(Rxa) + L4*cos(R1) + L7*cos(R2);
@@ -42,11 +42,11 @@ Sz = [double(subs(ez1, [Rxa, Rz], [iRx, iRz])) double(subs(ez2, [Rxa, Rz], [iRx,
 
 %% Inverting r & z with Rx and Rz
 % Desired position
-r = 250;
-z = 6;
+r = 165;
+z = 2;
 
 % required angles
 [sRx sRz] = vpasolve([er1 == r, ez1 == z], [Rxa, Rz]);
-sRx = rad2deg(double(sRx))
-sRz = rad2deg(double(sRz))
+sRx = pi/2 - double(sRx)
+sRz = double(sRz)
 
