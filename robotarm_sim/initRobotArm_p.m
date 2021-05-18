@@ -98,11 +98,11 @@ ref_ddZ = timeseries(ddZ',t);
 % FF_Z_num = [1.0000, 46.2319, 11.1400];
 
 % Model trained on both WN and MS
-FF_R_den = 138.2018;
 FF_R_num = [1.0000, 18.4292, 22.3640];
+FF_R_den = 138.2018;
 
-FF_X_den = 126.3693;
 FF_X_num = [1.0000, 22.8298, 30.9368];
+FF_X_den = 126.3693;
 
-FF_Z_den = 12.3458;
 FF_Z_num = [1.0000, 3.5412, 2.4414];
+FF_Z_den = 12.3458;

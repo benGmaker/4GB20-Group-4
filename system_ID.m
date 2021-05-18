@@ -186,16 +186,16 @@ clc; close all;
 % 
 
 %% Controller optimalization
-FF_R_den = 138.2018;
 FF_R_num = [1.0000, 18.4292, 22.3640];
+FF_R_den = 138.2018;
 
 % !!!Only these numbers need to be changed!!!
-C_R_den = 1;
 C_R_num = [1, 1, 1];
+C_R_den = 1;
 
-F = tf(FF_R_den,FF_R_num);
+F = tf(FF_R_num, FF_R_den);
 G  = 1/F;
-C = tf(C_R_den,C_R_num)
+C = tf(C_R_num, C_R_den)
 
 % Open loop
 figure()
