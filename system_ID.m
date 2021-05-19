@@ -62,6 +62,9 @@ clc; close all;
 % tf_mat_Z = tfest(dat_Z, 2, 1)
 % compare(dat_Z, tf_mat_Z)
 
+
+
+
 %% Create plots: R
 %<<<<<<< Updated upstream
 % % Nyquist
