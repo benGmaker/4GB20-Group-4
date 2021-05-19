@@ -31,10 +31,9 @@ t = 0:Ts:t_sim;
 % Z = sin(2*pi*20*t);                     % Keep this constant for now
 
 % 1 Hz input signal with equilibrium around middle of range of motion
-R = sin(2*pi*t);
-X = 0.8 + 0.2*sin(2*pi*t);
-Z = 0.2*sin(2*pi*t);
-
+% R = sin(2*pi*t);
+% X = 0.8 + 0.2*sin(2*pi*t);
+% Z = 0.2*sin(2*pi*t);
 
 % Multisine for system ID
 % expo = 0:12;
@@ -52,6 +51,11 @@ Z = 0.2*sin(2*pi*t);
 % R = randn(1, n+1);
 % X = randn(1, n+1);
 % Z = randn(1, n+1);
+
+%% Constant input signal
+R = 0.3*ones(1,n+1);
+X = 0*ones(1,n+1);
+Z = 0*ones(1,n+1);
 
 %% Finalizing data
 
@@ -106,3 +110,4 @@ FF_X_den = 126.3693;
 
 FF_Z_num = [1.0000, 3.5412, 2.4414];
 FF_Z_den = 12.3458;
+

@@ -7,17 +7,14 @@ if option == "source"
 
     % Calculation
     r = sqrt((10*N_row+alpha).^2+(10*(N_column-1)+40-beta).^2);
-    theta = atand((10*N_row+alpha)/(10*N_column+40-beta));
-    theta = theta(:,1);
-end
+    theta = atand((10*(N_column-1)+40-beta)./(10*N_row+alpha))
 
 %% Find print position
-if option == "print"
+elseif option == "print"
     [N_row, N_column] = find(matrix == 1);
 
     % Calculation
     r = sqrt((10*N_row+alpha).^2+(10*(N_column-1)+40+beta).^2);
-    theta = atand((10*N_row+alpha)/(10*N_column+40+beta)); 
-    theta = theta(:,1);
+    theta = -1*atand((10*(N_column-1)+40+beta)./(10*N_row+alpha))
 end
 
