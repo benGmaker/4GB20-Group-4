@@ -17,6 +17,7 @@ z_init = 60;        % Initial z of the EE
 
 addpath("Kinematics")
 addpath("Trajectory")
+addpath("Calibration")
 
 %% Load the GUI
 run('GUI.mlapp')
