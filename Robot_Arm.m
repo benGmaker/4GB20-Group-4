@@ -2,8 +2,19 @@ clear all; close all; clc;
 %% General script that runs the robot arm
 fs = 2048; % Simulation frequency
 % fs = 4096; % Real-world frequency
+ticsX=-2771;        % Difference in tics between calibration holes
+ticsZ=-2102;
+ticsR=7;
 
 IK = load("eqn_IK_robotarm.mat");
+z_pickup = 24;      % Pickup height of the bolts
+z_moving = 50;      % Safe moving height over the bolts, even with bolt clamped
+ 
+% This needs to be taken over by calibration
+r_init = 200;       % Initial r of the EE
+theta_init = 0;     % Initial theta of the EE
+z_init = 60;        % Initial z of the EE
+
 addpath("Kinematics")
 addpath("Trajectory")
 
@@ -13,17 +24,12 @@ disp(sprintf("First select the desired positions in the GUI (pop-up) and click c
 pause()
 
 %% Calibration
-% Default heights
-z_pickup = 24;      % Pickup height of the bolts
-z_moving = 50;      % Safe moving height over the bolts, even with bolt clamped
-
+[alpha,beta]=calibrationalphabeta(ticsX,ticsZ,ticsR);
 % This needs to be automatically adjusted by calibration.
-r_init = 200;       % Initial r of the EE
-theta_init = 0;     % Initial theta of the EE
-z_init = 60;        % Initial z of the EE
 
-alpha = 90; % offset from the plate
-beta = 0; % offset from center line of the plate (calibration line) (minus for offset to the source grid)
+% r_init = 200;       % Initial r of the EE
+% theta_init = 0;     % Initial theta of the EE
+% z_init = 60;        % Initial z of the EE
 
 %% GUI conversion to cylindrical coordinate frame
 [r_s,theta_s] = distance_and_angle(source, 'source', alpha, beta);
