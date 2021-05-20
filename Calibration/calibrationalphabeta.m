@@ -47,4 +47,4 @@ factor=(max(rA(:))-min(rA(:)))/(max(zA(:))-min(zA(:)));
 error=abs(rB-rA-65)+factor*abs(zB-zA);
 [cx,cz]=find(error==min(error(:)));
 alpha=rA(cx,cz)-75;
-beta=sin(1.5*radR)*(alpha+140);
+beta=rA(cx,cz)*cos(pi/2-radR-asin(rA(cx,cz)/75*sin(radR)));
