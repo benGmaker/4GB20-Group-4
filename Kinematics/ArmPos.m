@@ -175,7 +175,7 @@ classdef ArmPos
             %given the constraints
             succes = true;
             obj.getAngles;
-            if obj.checkPhiZ() == false
+            if obj.checkPhiZ(verbose) == false
                 if verbose
                     disp("Phi Z is incorrect");
                 end
@@ -243,11 +243,14 @@ classdef ArmPos
                 
         end
         
-        function succes = checkPhiZ(obj)
+        function succes = checkPhiZ(obj, verbose)
             if (obj.phiZ >= obj.phiZmin) && (obj.phiZ <= obj.phiZmax)
                 succes = true;
             else
                 succes = false;
+                if verbose
+                   disp("PhiZ is invalid"); 
+                end
             end 
         end
         

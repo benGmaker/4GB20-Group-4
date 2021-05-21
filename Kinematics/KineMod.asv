@@ -44,7 +44,7 @@ classdef KineMod %KinematicModel
                 end
                 return
             end
-            [r2, error2] = KineMod.BtoE(r1,verbose);
+            [r2, error2] = KineMod.BtoE(r1);
             if error2
                 if verbose 
                     disp('failed to find the E coordinate');
@@ -90,22 +90,19 @@ classdef KineMod %KinematicModel
                 A = A_pos(i,:); 
                 pos(i).A = A; %assinging new A value to a position
                 pos(i) = pos(i).getPhiZ(); %computing phiZ
-                if pos(i).checkPhiZ(verbose) %if phiZ is valid will return this solution
+                if pos(i).checkPhiZ() %if phiZ is valid will return this solution
                     finalPos(j) = pos(i).ACtoB(); 
                     j = j + 1;
                 end
             end
             
             if j == 1 %no positions are found
-                if verbose 
-                    disp("CtoA: No valid positions found") ;
-                end
                 finalPos = [];
                 error = true;
             end
         end
         
-        function [finalPos, error]= BtoE(positions,verbose)
+        function [finalPos, error]= BtoE(positions)
             %for given one or more possitions returns possible positions of
             %the robot arm
             error = false;
@@ -113,7 +110,7 @@ classdef KineMod %KinematicModel
             k = 1;
             for i=1:L %itterating over the input positions
                 CurPos = positions(i); %setting the current position
-                E_pos = CircCirc(CurPos.X,CurPos.B,CurPos.L3,CurPos.L4,verbose); %finding possible positions for E
+                E_pos = CircCirc(CurPos.X,CurPos.B,CurPos.L3,CurPos.L4,false); %finding possible positions for E
                 pos = [CurPos; CurPos]; %creating position array
                 for j=1:length(E_pos) %itterating over position array
                     E = E_pos(j,:); 
@@ -121,7 +118,7 @@ classdef KineMod %KinematicModel
                     pos(j) = pos(j).getAngles; %computing angles
                     pos(j) = pos(j).setD;
                     %pos(j).draw();
-                    if pos(j).validate(verbose) %check if a valid position has been created
+                    if pos(j).validate(false) %check if a valid position has been created
                         finalPos(k) = pos(j); %add valid position to result
                         k = k + 1;
                     end
@@ -129,9 +126,6 @@ classdef KineMod %KinematicModel
             end
             
             if k == 1
-                if verbose
-                   disp("BtoE: no valid positions found"); 
-                end
                 finalPos = [];
                 error = true;
             end
