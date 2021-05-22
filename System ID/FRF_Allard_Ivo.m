@@ -1,6 +1,7 @@
-clc;% close all;
-load('WN_10sec_RXZ_IO.mat')
-
+clc; %close all;
+% load('WN_10sec_RXZ_IO.mat') % This one works fine
+load('WN_10sec_RXZ_indiv_IO.mat') % This one works fine as well (probably better)
+% load('WN_10sec_RXZ_1hz_sine_lowampWN.mat') % This one needs some work
 %% Read output
 out_R_dat = out_R.data;
 out_X_dat = out_X.data;
@@ -58,7 +59,7 @@ end
 % tfestimate(Z', out_Z_dat, hann(nfft), [], nfft, fs);
 
 %% Manual bode plot
-figure()
+% figure()
 tiledlayout(2,3)
 nexttile;
 semilogx(f_R*2*pi, 10*log10(abs(H_R)))
@@ -85,7 +86,7 @@ hold on
 plot(linspace(1e1,1e4,length(f_R)),linspace(-180,-180,length(f_R)))
 xlabel('Frequency [rad/s]')
 ylabel('Phase [deg]')
-ylim([-360,180])
+ylim([-360,0])
 xlim([1e1,1e4])
 grid on
 
@@ -94,7 +95,7 @@ semilogx(f_X*2*pi, phase_X)
 hold on
 plot(linspace(1e1,1e4,length(f_X)),linspace(-180,-180,length(f_X)))
 xlabel('Frequency [rad/s]')
-ylim([-360,180])
+ylim([-360,0])
 xlim([1e1,1e4])
 grid on
 
@@ -103,6 +104,6 @@ semilogx(f_Z*2*pi, phase_Z)
 hold on
 plot(linspace(1e1,1e4,length(f_Z)),linspace(-180,-180,length(f_Z)))
 xlabel('Frequency [rad/s]')
-ylim([-360,180])
+ylim([-360,0])
 xlim([1e1,1e4])
 grid on
