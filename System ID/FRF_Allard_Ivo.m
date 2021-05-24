@@ -1,6 +1,6 @@
 clc; %close all;
-% load('WN_10sec_RXZ_IO.mat') % This one works fine
-load('WN_10sec_RXZ_indiv_IO.mat') % This one works fine as well (probably better)
+load('WN_10sec_RXZ_IO.mat') % This one works fine
+% load('WN_10sec_RXZ_indiv_IO.mat') % This one works fine as well (probably better)
 % load('WN_10sec_RXZ_1hz_sine_lowampWN.mat') % This one needs some work
 %% Read output
 out_R_dat = out_R.data;
@@ -59,7 +59,7 @@ end
 % tfestimate(Z', out_Z_dat, hann(nfft), [], nfft, fs);
 
 %% Manual bode plot
-% figure()
+figure()
 tiledlayout(2,3)
 nexttile;
 semilogx(f_R*2*pi, 10*log10(abs(H_R)))
