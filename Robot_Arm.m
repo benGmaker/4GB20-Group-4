@@ -9,7 +9,13 @@ ticsR=7;
 IK = load("eqn_IK_robotarm.mat");
 z_pickup = 24;      % Pickup height of the bolts
 z_moving = 50;      % Safe moving height over the bolts, even with bolt clamped
- 
+
+%% Calibration
+% This needs to be automatically adjusted by calibration.
+
+alpha = 80; % offset from the plate
+beta = 0; % offset from center line of the plate (calibration line) (minus for offset to the source grid)
+
 % This needs to be taken over by calibration
 r_init = 200;       % Initial r of the EE
 theta_init = 0;     % Initial theta of the EE
