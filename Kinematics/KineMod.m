@@ -52,6 +52,7 @@ classdef KineMod %KinematicModel
                 return 
             end
             pos = KineMod.negativePhi1(r2);
+            pos.isvalid = true;
         end
         
         
@@ -120,7 +121,7 @@ classdef KineMod %KinematicModel
                     pos(j).E = E;%assinging new position
                     pos(j) = pos(j).getAngles; %computing angles
                     pos(j) = pos(j).setD;
-                    %pos(j).draw();
+                    %pos(j).draw()
                     if pos(j).validate(verbose) %check if a valid position has been created
                         finalPos(k) = pos(j); %add valid position to result
                         k = k + 1;
