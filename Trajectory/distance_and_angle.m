@@ -7,7 +7,7 @@ if option == "source"
 
     % Calculation
     r = sqrt((10*N_row+alpha).^2+(10*(N_column-1)+40-beta).^2);
-    theta = atand((10*(N_column-1)+40-beta)./(10*N_row+alpha))
+    theta = -1*atand((10*(N_column-1)+40-beta)./(10*N_row+alpha));
 
 %% Find print position
 elseif option == "print"
@@ -15,6 +15,6 @@ elseif option == "print"
 
     % Calculation
     r = sqrt((10*N_row+alpha).^2+(10*(N_column-1)+40+beta).^2);
-    theta = -1*atand((10*(N_column-1)+40+beta)./(10*N_row+alpha))
+    theta = atand((10*(N_column-1)+40+beta)./(10*N_row+alpha));
 end
 
