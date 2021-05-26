@@ -1,4 +1,4 @@
-clear all; close all; clc
+clear all;% close all; clc
 %% Initialize robotarm
 fs = 2048;
 Ts = 1/fs;
@@ -10,7 +10,7 @@ initialAngleKrukZ = 0.025113778764355; % [rad]
 
 %% Trajectory
 % Time vector
-t_sim = 5;     % [s] Simulation duration (SHOULD BE EQUAL TO VALUE IN SIMULINK)
+t_sim = 10;     % [s] Simulation duration (SHOULD BE EQUAL TO VALUE IN SIMULINK)
 n = t_sim*fs;   % [-] Number of samples (based on sampling frequency)
 
 t = 0:Ts:t_sim;
@@ -31,10 +31,9 @@ t = 0:Ts:t_sim;
 % Z = sin(2*pi*20*t);                     % Keep this constant for now
 
 % 1 Hz input signal with equilibrium around middle of range of motion
-R = sin(2*pi*t);
-X = 0.8 + 0.2*sin(2*pi*t);
-Z = 0.2*sin(2*pi*t);
-
+% R = 0.3*sin(2*pi*t);
+% X = 0.2*sin(2*pi*t);
+% Z = 0.3*sin(2*pi*t);
 
 % Multisine for system ID
 % expo = 0:12;
@@ -49,9 +48,19 @@ Z = 0.2*sin(2*pi*t);
 % Z = 0.5*multisine;
 
 % White noise
-% R = randn(1, n+1);
-% X = randn(1, n+1);
-% Z = randn(1, n+1);
+% R = 0.05*randn(1, n+1);
+% X = 0.05*randn(1, n+1);
+% Z = 0.05*randn(1, n+1);
+
+% White noise & low amp 1Hz signal
+R = 0.05*randn(1, n+1);%+0.3*sin(2*pi*t);
+X = 0.05*randn(1, n+1);%+0.2*sin(2*pi*t);
+Z = 0.05*randn(1, n+1)+0.3*sin(2*pi*t);
+
+%% Constant input signal
+% R = 0*ones(1,n+1);
+% X = 0*ones(1,n+1);
+% Z = 0*ones(1,n+1);
 
 %% Finalizing data
 
@@ -98,11 +107,12 @@ ref_ddZ = timeseries(ddZ',t);
 % FF_Z_num = [1.0000, 46.2319, 11.1400];
 
 % Model trained on both WN and MS
-FF_R_den = 138.2018;
 FF_R_num = [1.0000, 18.4292, 22.3640];
+FF_R_den = 138.2018;
 
-FF_X_den = 126.3693;
 FF_X_num = [1.0000, 22.8298, 30.9368];
+FF_X_den = 126.3693;
 
-FF_Z_den = 12.3458;
 FF_Z_num = [1.0000, 3.5412, 2.4414];
+FF_Z_den = 12.3458;
+

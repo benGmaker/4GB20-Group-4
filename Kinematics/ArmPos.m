@@ -11,15 +11,27 @@ classdef ArmPos
         L5 = 130;
         L6 = 120;
         L7 = 65;
-        L8 = 28;
+        L8 = 40;
         X = [0,81]; %=[0,L1]
         Z = [0,246]; %=[0,L1+L2]
+        %{
+        %less constraint
+        phiXmin = -1;
+        phiXmax = pi/2;
+        phiZmin = -1;
+        phiZmax = 0.3;
+        phi1min = -pi*3/4;
+        phi1max = pi*3/4;
+        %}
+        %
+        %normal constraints
         phiXmin = 0.2;
         phiXmax = pi/2-0.1;
         phiZmin = -0.4;
         phiZmax = 0.3;
         phi1min = -pi*3/4;
         phi1max = pi*3/4;
+        %}
     end
     
     %object for describing the current position of the arm
@@ -35,7 +47,7 @@ classdef ArmPos
         phiX = 0;
         phiZ = 0;
         phi1 = 0;
-
+        isvalid = false; %be carefull this variable is not changed with the validate() function 
     end
     
     methods
@@ -99,9 +111,9 @@ classdef ArmPos
                    correctObj = obj;
                    correctPosCount = correctPosCount + 1;
                    if correctPosCount == 2
-                       %this is something we always want to print because
-                       %this should basically never happen
-                       disp("two correct pos found at" +obj.phiX + ' and ' + obj.phiZ);
+                       if verbose %this should basically never happen
+                           disp("two correct pos found at" +obj.phiX + ' and ' + obj.phiZ);
+                       end
                    end
                    if verbose
                        disp("correct pos found");
@@ -175,7 +187,7 @@ classdef ArmPos
             %given the constraints
             succes = true;
             obj.getAngles;
-            if obj.checkPhiZ() == false
+            if obj.checkPhiZ(verbose) == false
                 if verbose
                     disp("Phi Z is incorrect");
                 end
@@ -240,14 +252,16 @@ classdef ArmPos
                 end
                 succes = false;
             end
-                
         end
         
-        function succes = checkPhiZ(obj)
+        function succes = checkPhiZ(obj, verbose)
             if (obj.phiZ >= obj.phiZmin) && (obj.phiZ <= obj.phiZmax)
                 succes = true;
             else
                 succes = false;
+                if verbose
+                   disp("PhiZ is invalid"); 
+                end
             end 
         end
         
