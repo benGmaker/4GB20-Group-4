@@ -2,6 +2,7 @@ clear all; close all; clc;
 %% General script that runs the robot arm
 fs = 2048; % Simulation frequency
 % fs = 4096; % Real-world frequency
+
 ticsX=-2771;        % Difference in tics between calibration holes
 ticsZ=-2102;
 ticsR=7;
@@ -31,12 +32,12 @@ disp(sprintf("First select the desired positions in the GUI (pop-up) and click c
 pause()
 
 %% Calibration
-[alpha,beta]=calibrationalphabeta(ticsX,ticsZ,ticsR);
 % This needs to be automatically adjusted by calibration.
+% [alpha,beta]=calibrationalphabeta(ticsX,ticsZ,ticsR);
 
-% r_init = 200;       % Initial r of the EE
-% theta_init = 0;     % Initial theta of the EE
-% z_init = 60;        % Initial z of the EE
+% for sim this is the case
+alpha = 100; 
+beta = 0;
 
 %% GUI conversion to cylindrical coordinate frame
 [r_s,theta_s] = distance_and_angle(source, 'source', alpha, beta);
@@ -93,7 +94,6 @@ xlabel('Time [s]')
 ylabel('Angle [rad]')
 
 %% Timeseries
-
-ref_X = timeseries([t;phiX]);
-ref_Z = timeseries([t;phiZ]);
-ref_R = timeseries([t;phiR]);
+ref_X = timeseries(phiX',t);
+ref_Z = timeseries(phiZ',t);
+ref_R = timeseries(phiR',t);

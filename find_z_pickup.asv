@@ -1,0 +1,11 @@
+%%
+r = 1.772004514666935e+02;
+theta = 0.286051441717318;
+z = 24;
+
+%% IK
+posArray = ArmPos;
+posArray.D = [r,z];
+posArray = posArray.DtoC();
+posArray = KineMod.IK_MAU(posArray.C,false);
+
