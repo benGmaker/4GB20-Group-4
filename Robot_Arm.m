@@ -40,8 +40,8 @@ alpha = 100;
 beta = 0;
 
 %% GUI conversion to cylindrical coordinate frame
-[r_s,theta_s] = distance_and_angle(source, 'source', alpha, beta);
-[r_p,theta_p] = distance_and_angle(print, 'print', alpha, beta);
+[r_s,theta_s] = distance_and_angle(print, 'source', alpha, beta);
+[r_p,theta_p] = distance_and_angle(source, 'print', alpha, beta);
 theta_s = deg2rad(theta_s);
 theta_p = deg2rad(theta_p);
 
@@ -58,11 +58,13 @@ vel = 100; % [mm/s] End-effector velocity (CHANGE THIS IF YOU WANT TO GO FASTER 
 ni = 0;
 tic
 phiR=[];
+solenoid=[];
 for i=1:length(CoordinatePath)-1
-    n = CoordinatePath(4,i+1);
+    n = CoordinatePath(5,i+1);
     r = linspace(CoordinatePath(1,i), CoordinatePath(1,i+1), n);
     z = linspace(CoordinatePath(3,i), CoordinatePath(3,i+1), n);
     phiR=[phiR,linspace(CoordinatePath(2,i), CoordinatePath(2,i+1), n)];
+    solenoid = [solenoid,linspace(CoordinatePath(4,i), CoordinatePath(4,i), n)];
     
     for j=1:n
         posArray(ni+j) = ArmPos;
@@ -88,12 +90,23 @@ hold on
 plot(t,phiX)
 plot(t,phiZ)
 plot(t,phiR)
-legend('phiX','phiZ','phiR')
+
+legend('phiX','phiZ','phiR','solenoid')
 title('Angles of robot arm')
 xlabel('Time [s]')
 ylabel('Angle [rad]')
+
+% Figure solenoid
+figure(2)
+plot(t,solenoid)
+legend('solenoid')
+title('Signal for solenoid')
+ylim([-1 2])
+xlabel('Time [s]')
+ylabel('Value')
 
 %% Timeseries
 ref_X = timeseries(phiX',t);
 ref_Z = timeseries(phiZ',t);
 ref_R = timeseries(phiR',t);
+ref_solenoid = timeseries(solenoid',t);

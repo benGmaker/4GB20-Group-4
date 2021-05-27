@@ -7,8 +7,8 @@ function array = PositionsToArray(r_init,theta_init,z_init,r_s,theta_s,r_p,theta
     end
     
     % Putting everything into an array
-    array=[r_init r_init;theta_init theta_init;z_init z_moving];
+    array=[r_init r_init;theta_init theta_init;z_init z_moving;0 0];
     for i=1:length(r_s)
-        array=[array,[r_s(i) r_s(i) r_s(i) r_p(i) r_p(i) r_p(i);theta_s(i) theta_s(i) theta_s(i) theta_p(i) theta_p(i) theta_p(i);z_moving z_pickup z_moving z_moving z_pickup z_moving]];
+        array=[array,[r_s(i) r_s(i) r_s(i) r_p(i) r_p(i) r_p(i);theta_s(i) theta_s(i) theta_s(i) theta_p(i) theta_p(i) theta_p(i);z_moving z_pickup z_moving z_moving z_pickup z_moving;0 1 1 1 0 0]];
     end
 end

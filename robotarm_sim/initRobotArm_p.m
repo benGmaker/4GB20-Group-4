@@ -1,4 +1,4 @@
-clear all;% close all; clc
+% clear all;% close all; clc
 %% Initialize robotarm
 fs = 2048;
 Ts = 1/fs;
@@ -10,10 +10,10 @@ initialAngleKrukZ = 0.025113778764355; % [rad]
 
 %% Trajectory
 % Time vector
-t_sim = 10;     % [s] Simulation duration (SHOULD BE EQUAL TO VALUE IN SIMULINK)
-n = t_sim*fs;   % [-] Number of samples (based on sampling frequency)
-
-t = 0:Ts:t_sim;
+% t_sim = 10;     % [s] Simulation duration (SHOULD BE EQUAL TO VALUE IN SIMULINK)
+% n = t_sim*fs;   % [-] Number of samples (based on sampling frequency)
+% 
+% t = 0:Ts:t_sim;
 
 % RANGE: 
     % R: -pi/2 < R < pi/2
@@ -53,9 +53,9 @@ t = 0:Ts:t_sim;
 % Z = 0.05*randn(1, n+1);
 
 % White noise & low amp 1Hz signal
-R = 0.05*randn(1, n+1);%+0.3*sin(2*pi*t);
-X = 0.05*randn(1, n+1);%+0.2*sin(2*pi*t);
-Z = 0.05*randn(1, n+1)+0.3*sin(2*pi*t);
+% R = 0.05*randn(1, n+1);%+0.3*sin(2*pi*t);
+% X = 0.05*randn(1, n+1);%+0.2*sin(2*pi*t);
+% Z = 0.05*randn(1, n+1)+0.3*sin(2*pi*t);
 
 %% Constant input signal
 % R = 0*ones(1,n+1);
@@ -64,26 +64,26 @@ Z = 0.05*randn(1, n+1)+0.3*sin(2*pi*t);
 
 %% Finalizing data
 
-dR = [diff(R)/Ts, 0];
-dX = [diff(X)/Ts, 0];
-dZ = [diff(Z)/Ts, 0];
-
-ddR = [diff(dR)/Ts, 0];
-ddX = [diff(dX)/Ts, 0];
-ddZ = [diff(dZ)/Ts, 0];
-
+% dR = [diff(R)/Ts, 0];
+% dX = [diff(X)/Ts, 0];
+% dZ = [diff(Z)/Ts, 0];
+% 
+% ddR = [diff(dR)/Ts, 0];
+% ddX = [diff(dX)/Ts, 0];
+% ddZ = [diff(dZ)/Ts, 0];
+% 
 % Turn into timeseries for Simulink
-ref_R = timeseries(R',t);
-ref_X = timeseries(X',t);
-ref_Z = timeseries(Z',t);
-
-ref_dR = timeseries(dR',t);
-ref_dX = timeseries(dX',t);
-ref_dZ = timeseries(dZ',t);
-
-ref_ddR = timeseries(ddR',t);
-ref_ddX = timeseries(ddX',t);
-ref_ddZ = timeseries(ddZ',t);
+% ref_R = timeseries(R',t);
+% ref_X = timeseries(X',t);
+% ref_Z = timeseries(Z',t);
+% 
+% ref_dR = timeseries(dR',t);
+% ref_dX = timeseries(dX',t);
+% ref_dZ = timeseries(dZ',t);
+% 
+% ref_ddR = timeseries(ddR',t);
+% ref_ddX = timeseries(ddX',t);
+% ref_ddZ = timeseries(ddZ',t);
 
 %% Feedforward (UNCOMMENT THE MODEL YOU WANT TO USE)
 % Model trained on multisine 
@@ -107,12 +107,12 @@ ref_ddZ = timeseries(ddZ',t);
 % FF_Z_num = [1.0000, 46.2319, 11.1400];
 
 % Model trained on both WN and MS
-FF_R_num = [1.0000, 18.4292, 22.3640];
-FF_R_den = 138.2018;
-
-FF_X_num = [1.0000, 22.8298, 30.9368];
-FF_X_den = 126.3693;
-
-FF_Z_num = [1.0000, 3.5412, 2.4414];
-FF_Z_den = 12.3458;
+% FF_R_num = [1.0000, 18.4292, 22.3640];
+% FF_R_den = 138.2018;
+% 
+% FF_X_num = [1.0000, 22.8298, 30.9368];
+% FF_X_den = 126.3693;
+% 
+% FF_Z_num = [1.0000, 3.5412, 2.4414];
+% FF_Z_den = 12.3458;
 
