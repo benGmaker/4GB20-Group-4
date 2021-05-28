@@ -1,24 +1,28 @@
 clc; %close all;
-load('WN_10sec_RXZ_IO.mat') % This one works fine
+% load('WN_10sec_RXZ_IO.mat') % This one works fine
 % load('WN_10sec_RXZ_indiv_IO.mat') % This one works fine as well (probably better)
 % load('WN_10sec_RXZ_1hz_sine_lowampWN.mat') % This one needs some work
+addpath('FRF physical robot')
 
-%% Read output
-out_R_dat = out_R.data;
-out_X_dat = out_X.data;
-out_Z_dat = out_Z.data;
+%% Load data
+load('SSA8_AI_do_out_R.mat')
+out_R_dat = ans(2,:);
+load('SSA8_AI_do_R_ref.mat')
+R = ans(2,:);
 
-%% PSD [Not necessary]
-% window = 1024
-% [pRR,f_R] = pwelch(out_R_dat, 1024, window/2);
-% 
-% figure(1)
-% semilogx(f_R/max(f_R),10*log10(pRR))
-% xlabel('Frequency (kHz)')
-% ylabel('PSD (dB/Hz)')
+load('SSA8_AI_do_out_X.mat')
+out_X_dat = ans(3,:);
+load('SSA8_AI_do_X_ref.mat')
+X = ans(3,:);
+
+load('SSA8_AI_do_out_Z.mat')
+out_Z_dat = ans(4,:);
+load('SSA8_AI_do_Z_ref.mat')
+Z = ans(4,:);
 
 %% TF-estimate
 nfft = 1024;
+fs=4096;
 [H_R, f_R] = tfestimate(R', out_R_dat, hann(nfft), [], nfft, fs);
 [H_X, f_X] = tfestimate(X', out_X_dat, hann(nfft), [], nfft, fs);
 [H_Z, f_Z] = tfestimate(Z', out_Z_dat, hann(nfft), [], nfft, fs);
@@ -27,7 +31,7 @@ phase_R = rad2deg(angle(H_R));
 phase_X = rad2deg(angle(H_X));
 phase_Z = rad2deg(angle(H_Z));
 
-%% 
+%% Wrap phase
 % for i = 1:length(phase_R)-1
 %     if phase_R(i+1) - phase_R(i) >= 300
 %         phase_R(i+1:end) = phase_R(i+1:end) - 360;
@@ -51,14 +55,6 @@ phase_Z = rad2deg(angle(H_Z));
 %         phase_Z(i+1:end) = phase_Z(i+1:end) + 360;
 %     end
 % end
-
-%% Automatic figure
-% figure()
-% tfestimate(R', out_R_dat, hann(nfft), [], nfft, fs);
-% figure()
-% tfestimate(X', out_X_dat, hann(nfft), [], nfft, fs);
-% figure()
-% tfestimate(Z', out_Z_dat, hann(nfft), [], nfft, fs);
 
 %% Manual bode plot
 figure()
