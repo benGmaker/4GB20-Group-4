@@ -48,9 +48,9 @@ initialAngleKrukZ = 0.025113778764355; % [rad]
 % Z = 0.5*multisine;
 
 % White noise
-% R = 0.05*randn(1, n+1);
-% X = 0.05*randn(1, n+1);
-% Z = 0.05*randn(1, n+1);
+R = randn(1, n+1);
+X = 0.5*randn(1, n+1);
+Z = 0.5*randn(1, n+1);
 
 % White noise & low amp 1Hz signal
 % R = 0.05*randn(1, n+1);%+0.3*sin(2*pi*t);

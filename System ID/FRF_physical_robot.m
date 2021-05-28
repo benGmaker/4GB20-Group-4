@@ -2,6 +2,7 @@ clc; %close all;
 load('WN_10sec_RXZ_IO.mat') % This one works fine
 % load('WN_10sec_RXZ_indiv_IO.mat') % This one works fine as well (probably better)
 % load('WN_10sec_RXZ_1hz_sine_lowampWN.mat') % This one needs some work
+
 %% Read output
 out_R_dat = out_R.data;
 out_X_dat = out_X.data;
@@ -26,29 +27,30 @@ phase_R = rad2deg(angle(H_R));
 phase_X = rad2deg(angle(H_X));
 phase_Z = rad2deg(angle(H_Z));
 
-for i = 1:length(phase_R)-1
-    if phase_R(i+1) - phase_R(i) >= 300
-        phase_R(i+1:end) = phase_R(i+1:end) - 360;
-    elseif phase_R(i+1) - phase_R(i) <= -300
-        phase_R(i+1:end) = phase_R(i+1:end) + 360;
-    end
-end
-
-for i = 1:length(phase_X)-1
-    if phase_X(i+1) - phase_X(i) >= 300
-        phase_X(i+1:end) = phase_X(i+1:end) - 360;
-    elseif phase_X(i+1) - phase_X(i) <= -300
-        phase_X(i+1:end) = phase_X(i+1:end) + 360;
-    end
-end
-
-for i = 1:length(phase_Z)-1
-    if phase_Z(i+1) - phase_Z(i) >= 300
-        phase_Z(i+1:end) = phase_Z(i+1:end) - 360;
-    elseif phase_Z(i+1) - phase_Z(i) <= -300
-        phase_Z(i+1:end) = phase_Z(i+1:end) + 360;
-    end
-end
+%% 
+% for i = 1:length(phase_R)-1
+%     if phase_R(i+1) - phase_R(i) >= 300
+%         phase_R(i+1:end) = phase_R(i+1:end) - 360;
+%     elseif phase_R(i+1) - phase_R(i) <= -300
+%         phase_R(i+1:end) = phase_R(i+1:end) + 360;
+%     end
+% end
+% 
+% for i = 1:length(phase_X)-1
+%     if phase_X(i+1) - phase_X(i) >= 300
+%         phase_X(i+1:end) = phase_X(i+1:end) - 360;
+%     elseif phase_X(i+1) - phase_X(i) <= -300
+%         phase_X(i+1:end) = phase_X(i+1:end) + 360;
+%     end
+% end
+% 
+% for i = 1:length(phase_Z)-1
+%     if phase_Z(i+1) - phase_Z(i) >= 300
+%         phase_Z(i+1:end) = phase_Z(i+1:end) - 360;
+%     elseif phase_Z(i+1) - phase_Z(i) <= -300
+%         phase_Z(i+1:end) = phase_Z(i+1:end) + 360;
+%     end
+% end
 
 %% Automatic figure
 % figure()
@@ -86,7 +88,7 @@ hold on
 plot(linspace(1e1,1e4,length(f_R)),linspace(-180,-180,length(f_R)))
 xlabel('Frequency [rad/s]')
 ylabel('Phase [deg]')
-ylim([-360,0])
+ylim([-180,180])
 xlim([1e1,1e4])
 grid on
 
@@ -95,7 +97,7 @@ semilogx(f_X*2*pi, phase_X)
 hold on
 plot(linspace(1e1,1e4,length(f_X)),linspace(-180,-180,length(f_X)))
 xlabel('Frequency [rad/s]')
-ylim([-360,0])
+ylim([-180,180])
 xlim([1e1,1e4])
 grid on
 
@@ -104,6 +106,6 @@ semilogx(f_Z*2*pi, phase_Z)
 hold on
 plot(linspace(1e1,1e4,length(f_Z)),linspace(-180,-180,length(f_Z)))
 xlabel('Frequency [rad/s]')
-ylim([-360,0])
+ylim([-180,180])
 xlim([1e1,1e4])
 grid on
