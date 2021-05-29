@@ -33,11 +33,11 @@ pause()
 
 %% Calibration
 % This needs to be automatically adjusted by calibration.
-% [alpha,beta]=calibrationalphabeta(ticsX,ticsZ,ticsR);
+[alpha,beta]=calibrationalphabeta(ticsX,ticsZ,ticsR);
 
 % for sim this is the case
-alpha = 100; 
-beta = 0;
+% alpha = 100; 
+% beta = 0;
 
 %% GUI conversion to cylindrical coordinate frame
 [r_s,theta_s] = distance_and_angle(print, 'source', alpha, beta);
