@@ -1,18 +1,18 @@
 close all; clc;
 
 %% Load data
-load('Group_04_test_16_19.mat');
-
-time = data(1,:);
-R = data(2,:);
-X = data(3,:);
-Z = data(4,:);
-
-%% 
-figure(1)
-plot(time, R, time, X, time, Z)
-legend('R', 'X', 'Z')
-grid on
+% load('Group_04_test_16_19.mat');
+% 
+% time = data(1,:);
+% R = data(2,:);
+% X = data(3,:);
+% Z = data(4,:);
+% 
+% %% 
+% figure(1)
+% plot(time, R, time, X, time, Z)
+% legend('R', 'X', 'Z')
+% grid on
 
 %% 'Zero' positions after homing (E-box)
 Ebox_zero_R = 487;
@@ -35,9 +35,15 @@ alt_X = 0.4985; % rad
 alt_Z = 0.4784; % rad
 
 %% E-box relations
-rad_step_R = (alt_R - zero_R)/(Ebox_alt_R - Ebox_zero_R);
-rad_step_X = (alt_X - zero_X)/(Ebox_alt_X - Ebox_zero_X);
-rad_step_Z = (alt_Z - zero_Z)/(Ebox_alt_Z - Ebox_zero_Z);
+rad_step_R = (alt_R - zero_R)/(Ebox_alt_R - Ebox_zero_R)
+rad_step_X = (alt_X - zero_X)/(Ebox_alt_X - Ebox_zero_X)
+rad_step_Z = (alt_Z - zero_Z)/(Ebox_alt_Z - Ebox_zero_Z)
+
+% step_rev_R = 1/rad_step_R*2*pi
+% 
+% step_per_rad_R = 4000*105/9/2/pi
+% step_per_rev_X = 1000*100/9;
+% step_per_rev_Z = 1000*100/9;
 
 %% Center calibraition hole positions (E-box)
 Ebox_calib_R = 3176;    % steps

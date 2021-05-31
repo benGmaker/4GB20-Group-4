@@ -1,16 +1,16 @@
 %% Controller R
-controller_R = load('Controller_R.mat');
+controller_R = load('Controllers\Controller_R.mat');
 
 R_num = controller_R.shapeit_data.C_tf.Numerator;
 R_den = controller_R.shapeit_data.C_tf.Denominator;
 
 tf_R = tf(R_num,R_den)
+% tf_plant_R = H_R;
 
-
-% plot(error_R.Time, error_R.Data)
+plot(error_R.Time, error_R.Data)
 ss_error_R = mode(error_R.Data)
-% step(tf_R)
-info_R = stepinfo(tf_R);
+step(tf_R)
+info_R = stepinfo(tf_R)
 SettlingTime_R = info_R.SettlingTime
 
 %% Controller X
