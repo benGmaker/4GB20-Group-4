@@ -6,22 +6,22 @@ step_per_rad_X = 1000*100/9/2/pi;
 step_per_rad_Z = 1000*100/9/2/pi;
 
 %% Ebox values at 'Zero' position
-Ebox_zero_R = -18068;
-Ebox_zero_Z = -4474;
-Ebox_zero_X = 37454;
+Ebox_zero_R = 37467;
+Ebox_zero_X = -18056;
+Ebox_zero_Z = -3978;
 
-%% Ebox values as calibration hole
-Ebox_cali_R = 0; % TBD
-Ebox_cali_Z = 0; % TBD
-Ebox_cali_X = 0; % TBD
+%% Ebox values at middle calibration hole
+Ebox_cali_R = 38145;
+Ebox_cali_X = -20913;
+Ebox_cali_Z = -7069;
 
 %% Measured angle at 'Zero' position
 meas_zero_R = 0;
 meas_zero_X = 0;
-meas_zero_Z = -0.066020569615190;
+meas_zero_Z = -4.2411500e-04;
 
 %% Derive measured angle at calibration hole
-meas_cali_R = meas_zero_R + 1/step_per_rad_R * (Ebox_cali_R - Ebox_zero_R); % rad
+meas_cali_R = meas_zero_R + 1/step_per_rad_R * (Ebox_cali_R - Ebox_zero_R);
 meas_cali_X = meas_zero_X + 1/step_per_rad_X * (Ebox_cali_X - Ebox_zero_X);
 meas_cali_Z = meas_zero_Z + 1/step_per_rad_Z * (Ebox_cali_Z - Ebox_zero_Z);
 
@@ -32,9 +32,9 @@ actual_calib_X = 1.147615161297590;
 actual_calib_Z = -0.211769005130479;
 
 %% Offset is difference between measured and calculated angle
-offset_R = actual_calib_R - meas_cali_R;
-offset_X = actual_calib_X - meas_cali_X;
-offset_Z = actual_calib_Z - meas_cali_Z;
+offset_R = actual_calib_R - meas_cali_R
+offset_X = actual_calib_X - meas_cali_X
+offset_Z = actual_calib_Z - meas_cali_Z
 
 %%
 % data = load('SSA8_AI_1139.mat').ans;
