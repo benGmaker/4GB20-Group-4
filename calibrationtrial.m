@@ -69,6 +69,13 @@ R = out_RXZ(2,:);
 X = out_RXZ(3,:);
 Z = out_RXZ(4,:);
 
+figure()
+hold on
+plot(t,R)
+plot(t,X)
+plot(t,Z)
+legend('R','X','Z')
+
 %% Bolt times
 t1 = 20;
 t2 = 26;
