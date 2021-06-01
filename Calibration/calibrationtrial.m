@@ -1,3 +1,4 @@
+addpath(genpath("..\..\4GB20-Group-4"))
 %% General script that runs the robot arm
 fs = 2048; % Simulation frequency
 % fs = 4096; % Real-world frequency
@@ -15,10 +16,6 @@ z_moving = 50;      % Safe moving height over the bolts, even with bolt clamped
 r_init = 200;       % Initial r of the EE
 theta_init = 0;     % Initial theta of the EE
 z_init = 60;        % Initial z of the EE
-
-addpath("Kinematics")
-addpath("Trajectory")
-addpath("Calibration")
 
 %% Load the GUI
 % run('GUI.mlapp')

@@ -1,3 +1,4 @@
+addpath(genpath("..\..\4GB20-Group-4"))
 %% General script that runs the robot arm
 fs = 2048; % Simulation frequency
 % fs = 4096; % Real-world frequency
@@ -15,11 +16,6 @@ z_moving = 50;      % Safe moving height over the bolts, even with bolt clamped
 r_init = 200;       % Initial r of the EE
 theta_init = 0;     % Initial theta of the EE
 z_init = 60;        % Initial z of the EE
-
-addpath("Kinematics")
-addpath("Trajectory")
-addpath("Calibration")
-addpath("System ID")
 
 %% Load the GUI
 run('GUI.mlapp')
@@ -94,19 +90,19 @@ bolts_RXZ = [R_bolts;X_bolts;Z_bolts];
 %% Figure R
 figure(1)
 hold on
-plot(1:length(r),0+1*bolts_RXZ(1,:)-0*(bolts_RXZ(1,:)-0).^2)
+plot(1:length(r),-0.155+bolts_RXZ(1,:))
 plot(1:length(r),Motorangles(1,:))
 legend('Exp','IK')
 %% Figure X
 figure(2)
 hold on
-plot(1:length(r),0+1*bolts_RXZ(2,:))
+plot(1:length(r),0.04+bolts_RXZ(2,:))
 plot(1:length(r),Motorangles(2,:))
 legend('Exp','IK')
 %% Figure Z
 figure(3)
 hold on
-plot(1:length(r),bolts_RXZ(3,:)+0+0*(bolts_RXZ(3,:)).^2)
+plot(1:length(r),0.232+bolts_RXZ(3,:))
 plot(1:length(r),Motorangles(3,:))
 legend('Exp','IK')
 
