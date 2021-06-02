@@ -3,9 +3,9 @@ clear all; close all; clc;
 fs = 2048; % Simulation frequency
 % fs = 4096; % Real-world frequency
 
-ticsX=-2771;        % Difference in tics between calibration holes
-ticsZ=-2102;
-ticsR=7;
+% ticsX=-2771;        % Difference in tics between calibration holes
+% ticsZ=-2102;        % Calibration alpha beta
+% ticsR=7;
 
 IK = load("eqn_IK_robotarm.mat");
 z_pickup = 24;      % Pickup height of the bolts
@@ -14,7 +14,8 @@ z_moving = 50;      % Safe moving height over the bolts, even with bolt clamped
 %% Calibration
 % This needs to be automatically adjusted by calibration.
 
-alpha = 80; % offset from the plate
+% alpha = 100; Simulatie
+alpha = 90; % physical robot
 beta = 0; % offset from center line of the plate (calibration line) (minus for offset to the source grid)
 
 % This needs to be taken over by calibration
@@ -31,17 +32,10 @@ run('GUI.mlapp')
 disp(sprintf("First select the desired positions in the GUI (pop-up) and click confirm. \nNext select the Command Window and press any key."))
 pause()
 
-%% Calibration
-% This needs to be automatically adjusted by calibration.
-%[alpha,beta]=calibrationalphabeta(ticsX,ticsZ,ticsR);
-
-% for sim this is the case
- alpha = 100; 
- beta = 0;
 
 %% GUI conversion to cylindrical coordinate frame
-[r_s,theta_s] = distance_and_angle(print, 'source', alpha, beta);
-[r_p,theta_p] = distance_and_angle(source, 'print', alpha, beta);
+[r_s,theta_s] = distance_and_angle(source, 'source', alpha, beta);
+[r_p,theta_p] = distance_and_angle(print, 'print', alpha, beta);
 theta_s = deg2rad(theta_s);
 theta_p = deg2rad(theta_p);
 

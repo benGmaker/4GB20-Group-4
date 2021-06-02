@@ -32,13 +32,13 @@ alpha = 90;
 beta = 0;
 
 %% GUI conversion to cylindrical coordinate frame
-[r_s,theta_s] = distance_and_angle(print, 'source', alpha, beta);
-[r_p,theta_p] = distance_and_angle(source, 'print', alpha, beta);
+[r_s,theta_s] = distance_and_angle(source, 'source', alpha, beta);
+[r_p,theta_p] = distance_and_angle(print, 'print', alpha, beta);
 theta_s = deg2rad(theta_s);
 theta_p = deg2rad(theta_p);
 
-r=[r_s(3) r_s(4) r_s(1) r_s(2) r_p(2) r_p(4) r_p(1) r_p(3)];
-phiR=[theta_s(3) theta_s(4) theta_s(1) theta_s(2) theta_p(2) theta_p(4) theta_p(1) theta_p(3)];
+r=[r_p(2) r_p(4) r_p(1) r_p(3) r_s(3) r_s(4) r_s(1) r_s(2)];
+phiR=[theta_p(2) theta_p(4) theta_p(1) theta_p(3) theta_s(3) theta_s(4) theta_s(1) theta_s(2)];
 z=z_pickup*ones(1,8);
 
 
