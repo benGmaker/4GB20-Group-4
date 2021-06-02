@@ -105,6 +105,28 @@ ylim([-1 2])
 xlabel('Time [s]')
 ylabel('Value')
 
+% Figure combined
+figure(3)
+left_color = [0 0 0];
+right_color = [0 0 0];
+set(figure(3),'defaultAxesColorOrder',[left_color; right_color]);
+
+title('Angles of robot arm')
+yyaxis left
+xlabel('Time [s]')
+ylabel('Angle [rad]')
+
+hold on
+plot(t,phiX,'-b');
+plot(t,phiZ,'-m');
+plot(t,phiR,'-r');
+
+yyaxis right
+ylabel('Signal value')
+plot(t,solenoid,'-k');
+ylim([-1 2])
+yticks(-1:1:2)
+legend('phiX','phiZ','phiR','solenoid')
 %% Timeseries
 ref_X = timeseries(phiX',t);
 ref_Z = timeseries(phiZ',t);
