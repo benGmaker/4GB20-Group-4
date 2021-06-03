@@ -44,7 +44,7 @@ theta_p = deg2rad(theta_p);
 % array, so the path can be made between these
 CoordinatePath = PositionsToArray(r_init,theta_init,z_init,r_s,theta_s,r_p,theta_p,z_pickup,z_moving);
 
-vel = 100; % [mm/s] End-effector velocity (CHANGE THIS IF YOU WANT TO GO FASTER OR SLOWER)
+vel = 10; % [mm/s] End-effector velocity (CHANGE THIS IF YOU WANT TO GO FASTER OR SLOWER)
 
 [CoordinatePath, L] = fcn_time_distance_trajectory(CoordinatePath, vel, fs);
 
@@ -72,7 +72,7 @@ toc
 
 % phiX and phiZ
 for i=1:length(posArray)
-    phiX(i) = posArray(i).phiX;
+    phiX(i) = pi/2 - posArray(i).phiX;
     phiZ(i) = posArray(i).phiZ;
 end
 
