@@ -3,10 +3,6 @@ addpath(genpath("..\..\4GB20-Group-4"))
 fs = 2048; % Simulation frequency
 % fs = 4096; % Real-world frequency
 
-ticsX=-2771;        % Difference in tics between calibration holes
-ticsZ=-2102;
-ticsR=0;
-
 IK = load("eqn_IK_robotarm.mat");
 z_pickup = 24;      % Pickup height of the bolts
 z_moving = 50;      % Safe moving height over the bolts, even with bolt clamped
@@ -37,8 +33,8 @@ beta = 0;
 theta_s = deg2rad(theta_s);
 theta_p = deg2rad(theta_p);
 
-r=[r_p(2) r_p(4) r_p(1) r_p(3) r_s(3) r_s(4) r_s(1) r_s(2)];
-phiR=[theta_p(2) theta_p(4) theta_p(1) theta_p(3) theta_s(3) theta_s(4) theta_s(1) theta_s(2)];
+r=[flip(r_p') r_s(4) r_s(2) r_s(3) r_s(1)];
+phiR=[flip(theta_p') theta_s(4) theta_s(2) theta_s(3) theta_s(1)];
 z=z_pickup*ones(1,8);
 
 
@@ -87,24 +83,23 @@ R_bolts = [R(round(t1-15)*4096) R(round(t2-15)*4096) R(round(t3-15)*4096) R(roun
 X_bolts = [X((t1-15)*4096) X((t2-15)*4096) X((t3-15)*4096) X((t4-15)*4096) X((t5-15)*4096) X((t6-15)*4096) X((t7-15)*4096) X((t8-15)*4096)];
 Z_bolts = [Z((t1-15)*4096) Z((t2-15)*4096) Z((t3-15)*4096) Z((t4-15)*4096) Z((t5-15)*4096) Z((t6-15)*4096) Z((t7-15)*4096) Z((t8-15)*4096)];
 bolts_RXZ = [R_bolts;X_bolts;Z_bolts];
-
+ 
 %% Figure R
-figure()
+figure(1)
 hold on
-plot(1:8,0.3+0.6*bolts_RXZ(1,:)-0.7*(bolts_RXZ(1,:)-0.3).^2)
-plot(1:8,Motorangles(1,:))
+plot(1:length(r),-0.04-bolts_RXZ(1,:))
+plot(1:length(r),Motorangles(1,:))
 legend('Exp','IK')
 %% Figure X
-figure()
+figure(2)
 hold on
-plot(1:8,0.75-(0.9-bolts_RXZ(2,:))/1.8)
-plot(1:8,Motorangles(2,:))
+plot(1:length(r),0.04+bolts_RXZ(2,:))
+plot(1:length(r),Motorangles(2,:))
 legend('Exp','IK')
 %% Figure Z
-figure()
+figure(3)
 hold on
-plot(1:8,1.5*bolts_RXZ(3,:)/1.4+0.2+0.5*(bolts_RXZ(3,:)).^2)
-plot(1:8,Motorangles(3,:))
+plot(1:length(r),0.232+bolts_RXZ(3,:))
+plot(1:length(r),Motorangles(3,:))
 legend('Exp','IK')
-
 
