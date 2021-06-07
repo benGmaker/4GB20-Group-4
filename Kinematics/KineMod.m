@@ -8,7 +8,7 @@ classdef KineMod %KinematicModel
         L5 = 130;
         L6 = 120;
         L7 = 65;
-        L8 = 28;
+        L8 = 27;
     end
     
     properties 
