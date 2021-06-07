@@ -31,8 +31,8 @@ alpha = 90;
 beta = 0;
 
 %% GUI conversion to cylindrical coordinate frame
-[r_s,theta_s] = distance_and_angle(print, 'source', alpha, beta);
-[r_p,theta_p] = distance_and_angle(source, 'print', alpha, beta);
+[r_s,theta_s] = distance_and_angle(source, 'source', alpha, beta);
+[r_p,theta_p] = distance_and_angle(print, 'print', alpha, beta);
 theta_s = deg2rad(theta_s);
 theta_p = deg2rad(theta_p);
 
@@ -90,7 +90,7 @@ bolts_RXZ = [R_bolts;X_bolts;Z_bolts];
 %% Figure R
 figure(1)
 hold on
-plot(1:length(r),-0.155+bolts_RXZ(1,:))
+plot(1:length(r),0.04+bolts_RXZ(1,:))
 plot(1:length(r),Motorangles(1,:))
 legend('Exp','IK')
 %% Figure X
