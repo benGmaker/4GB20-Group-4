@@ -99,7 +99,7 @@ solenoid =  zeros(1,length(t));
 %******IMPORTANT: here you can overwrite one of the refrence signals to perform
 %to perform the acceleration experiment
 %phiX = x; 
-%phiZ = x;
+% phiZ = x;
 phiR = x;
 
 %{
