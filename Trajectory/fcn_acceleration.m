@@ -1,4 +1,4 @@
-function [coords] = fcn_acceleration(pospath,aRmax,aXmax,aZmax,vmax,fs)
+function [coords] = fcn_acceleration(pospath,aRmax,aXmax,aZmax,vmax,fs,pause_bolt,pause_end)
 % The naming in this function is incorrect, but it still fullfills its
 % function. R=r, X=theta, Z=z
 % 
@@ -6,7 +6,6 @@ function [coords] = fcn_acceleration(pospath,aRmax,aXmax,aZmax,vmax,fs)
 % aXmax=5;    % mm/s^2
 % aZmax=5;    % mm/s^2
 % vmax=20;    % mm/s
-% 
 % pospath=CoordinatePath;
 
 amax=[aRmax aXmax aZmax];
@@ -14,15 +13,19 @@ t_RXZ=[vmax/aRmax,vmax/aXmax,vmax/aZmax];
 t_max=max(t_RXZ);
 L_RXZ=[vmax^2/aRmax,vmax^2/aXmax,vmax^2/aZmax];
 
-vR=[0];xR=[pospath(1,1)];vX=[0];xX=[pospath(2,1)];vZ=[0];xZ=[pospath(3,1)];
-z=0;
+vR=[0];xR=[pospath(1,1)];vX=[0];xX=[pospath(2,1)];vZ=[0];xZ=[pospath(3,1)];solenoid=[0];
+
 
 for i=1:length(pospath)-1
     L=[pospath(1,i+1)-pospath(1,i) pospath(2,i+1)-pospath(2,i) pospath(3,i+1)-pospath(3,i)];
     
     frac_L=[abs(L(1))/abs(L_RXZ(1)) abs(L(2))/abs(L_RXZ(2)) abs(L(3))/abs(L_RXZ(3))];
     max_L=find(frac_L==max(frac_L));
-    
+    if max(frac_L)==0
+        aR=[zeros(1,round(pause_bolt*fs))];
+        aX=[zeros(1,round(pause_bolt*fs))];
+        aZ=[zeros(1,round(pause_bolt*fs))];
+    else
     if max_L==1
         k=sign(L(1));
         m=sign(L(2))*frac_L(2)/frac_L(1);
@@ -49,6 +52,7 @@ for i=1:length(pospath)-1
         aX=[m*aXmax*ones(1,round(t_max/2*fs)) zeros(1,round(t_flat*fs)) m*-aXmax*ones(1,round(t_max/2*fs))];
         aZ=[n*aZmax*ones(1,round(t_max/2*fs)) zeros(1,round(t_flat*fs)) n*-aZmax*ones(1,round(t_max/2*fs))];
     end
+    end
     z=length(xR)-1;
     for j=length(xR):length(xR)+length(aR)-1
         vR(j+1)=vR(j)+aR(j-z)/fs;
@@ -58,19 +62,10 @@ for i=1:length(pospath)-1
         xX(j+1)=xX(j)+vX(j)/fs;
         xZ(j+1)=xZ(j)+vZ(j)/fs;
     end
+    vR(j+1)=0;vX(j+1)=0;vZ(j+1)=0;xR(length(xR))=pospath(1,i+1);xZ(length(xZ))=pospath(3,i+1);
     
-[xR(j), xX(j), xZ(j), pospath(1,i+1) pospath(2,i+1) pospath(3,i+1)]
+    solenoid=[solenoid pospath(4,i)*ones(1,length(aR))];
 end
-coords=[xR;xX;xZ];
+coords=[xR xR(length(xR))*ones(1,round(pause_end*fs));xX  xX(length(xX))*ones(1,round(pause_end*fs));xZ  xZ(length(xZ))*ones(1,round(pause_end*fs));solenoid zeros(1,round(pause_end*fs))];
 
 end
-
-% figure()
-% hold on
-% plot(1:length(xR), xR)
-% plot(1:length(xR), xZ)
-% legend("xr","xz")
-% 
-% figure()
-% plot(1:length(xR), xX)
-% legend("xTheta")

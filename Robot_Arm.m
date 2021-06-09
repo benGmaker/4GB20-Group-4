@@ -1,36 +1,47 @@
 clear all; close all; clc;
 %% General script that runs the robot arm
-fs = 2048; % Simulation frequency
-% fs = 4096; % Real-world frequency
-
-% ticsX=-2771;        % Difference in tics between calibration holes
-% ticsZ=-2102;        % Calibration alpha beta
-% ticsR=7;
-
+addpath("Kinematics")
+addpath("Trajectory")
+addpath("Calibration")
 IK = load("eqn_IK_robotarm.mat");
+
+%% Parameters that can be changed
+% fs = 2048; % Simulation frequency
+fs = 4096; % Real-world frequency
+
+offsetR=-0.0653;
+offsetX=0.0211;
+offsetZ=0.2538;
+
 z_pickup = 24;      % Pickup height of the bolts
 z_moving = 40;      % Safe moving height over the bolts, even with bolt clamped
 
-%% Calibration
+pause_bolt=0.5;     % The pause above a bolt in seconds
+pause_end=1;        % The pause at the end in seconds
 
 % alpha = 100; Simulatie
 alpha = 90; % physical robot
 beta = 0; % offset from center line of the plate (calibration line) (minus for offset to the source grid)
 
-% This needs to be taken over by calibration
-r_init = 200;       % Initial r of the EE
-theta_init = 0;     % Initial theta of the EE
-z_init = 60;        % Initial z of the EE
+armax=7;            % Maximum acceleration r direction in mm/s^2
+athetamax=9;        % Maximum acceleration theta direction in mm/s^2
+azmax=7;            % Maximum acceleration z direction in mm/s^2
+vmax=50;            % Maximum velocity in mm/s
 
-addpath("Kinematics")
-addpath("Trajectory")
-addpath("Calibration")
+%% Calibration
+calpos(1) = ArmPos;
+calpos(1).phiX = offsetX;
+calpos(1).phiZ = offsetZ;
+calpos(1) = calpos(1).phiZXtoFullpos(false);
+
+r_init = calpos(1).D(1);       % Initial r of the EE
+theta_init = offsetR;     % Initial theta of the EE
+z_init = calpos(1).D(2);        % Initial z of the EE
 
 %% Load the GUI
 run('GUI.mlapp')
 disp(sprintf("First select the desired positions in the GUI (pop-up) and click confirm. \nNext select the Command Window and press any key."))
 pause()
-
 
 %% GUI conversion to cylindrical coordinate frame
 [r_s,theta_s] = distance_and_angle(source, 'source', alpha, beta);
@@ -43,12 +54,7 @@ theta_p = deg2rad(theta_p);
 % array, so the path can be made between these
 CoordinatePath = PositionsToArray(r_init,theta_init,z_init,r_s,theta_s,r_p,theta_p,z_pickup,z_moving);
 
-armax=5;    % mm/s^2
-athetamax=5;    % mm/s^2
-azmax=5;    % mm/s^2
-vmax=20;    % mm/s
-
-[coords] = fcn_acceleration(CoordinatePath,armax,athetamax,azmax,vmax,fs);
+[coords] = fcn_acceleration(CoordinatePath,armax,athetamax,azmax,vmax,fs,pause_bolt,pause_end);
 
 %% Inverse kinematics
 tic
@@ -59,15 +65,16 @@ tic
 %     z = linspace(CoordinatePath(3,i), CoordinatePath(3,i+1), n);
 %     phiR=[phiR,linspace(CoordinatePath(2,i), CoordinatePath(2,i+1), n)];
 %     solenoid = [solenoid,linspace(CoordinatePath(4,i), CoordinatePath(4,i), n)];
-    r=coords(1,:);
-    phiR=coords(2,:);
-    z=coords(3,:);
-    for j=1:length(r)
-        posArray(j) = ArmPos;
-        posArray(j).D = [r(j),z(j)];
-        posArray(j) = posArray(j).DtoC();
-        posArray(j) = KineMod.IK_MAU(posArray(j).C,false);
-    end
+r=coords(1,:);
+phiR=coords(2,:);
+z=coords(3,:);
+solenoid=coords(4,:);
+for j=1:length(r)
+    posArray(j) = ArmPos;
+    posArray(j).D = [r(j),z(j)];
+    posArray(j) = posArray(j).DtoC();
+    posArray(j) = KineMod.IK_MAU(posArray(j).C,false);
+end
 % end
 toc
 
@@ -91,39 +98,40 @@ title('Angles of robot arm')
 xlabel('Time [s]')
 ylabel('Angle [rad]')
 
-% % Figure solenoid
-% figure(2)
-% plot(t,solenoid)
-% legend('solenoid')
-% title('Signal for solenoid')
-% ylim([-1 2])
-% xlabel('Time [s]')
-% ylabel('Value')
-% 
-% % Figure combined
-% figure(3)
-% left_color = [0 0 0];
-% right_color = [0 0 0];
-% set(figure(3),'defaultAxesColorOrder',[left_color; right_color]);
-% 
-% title('Angles of robot arm')
-% yyaxis left
-% xlabel('Time [s]')
-% ylabel('Angle [rad]')
-% 
-% hold on
-% plot(t,phiX,'-b');
-% plot(t,phiZ,'-m');
-% plot(t,phiR,'-r');
-% 
-% yyaxis right
-% ylabel('Signal value')
-% plot(t,solenoid,'-k');
-% ylim([-1 2])
-% yticks(-1:1:2)
-% legend('phiX','phiZ','phiR','solenoid')
+% Figure solenoid
+figure(2)
+plot(t,solenoid)
+legend('solenoid')
+title('Signal for solenoid')
+ylim([-1 2])
+xlabel('Time [s]')
+ylabel('Value')
+
+% Figure combined
+figure(3)
+left_color = [0 0 0];
+right_color = [0 0 0];
+set(figure(3),'defaultAxesColorOrder',[left_color; right_color]);
+
+title('Angles of robot arm')
+yyaxis left
+xlabel('Time [s]')
+ylabel('Angle [rad]')
+
+hold on
+plot(t,phiX,'-b');
+plot(t,phiZ,'-m');
+plot(t,phiR,'-r');
+
+yyaxis right
+ylabel('Signal value')
+plot(t,solenoid,'-k');
+ylim([-1 2])
+yticks(-1:1:2)
+legend('phiX','phiZ','phiR','solenoid')
+
 %% Timeseries
 ref_X = timeseries(phiX',t);
 ref_Z = timeseries(phiZ',t);
 ref_R = timeseries(phiR',t);
-% ref_solenoid = timeseries(solenoid',t);
+ref_solenoid = timeseries(solenoid',t);
