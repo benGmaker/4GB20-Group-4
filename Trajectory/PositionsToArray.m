@@ -1,5 +1,8 @@
 function array = PositionsToArray(r_init,theta_init,z_init,r_s,theta_s,r_p,theta_p,z_pickup,z_moving)
-    % Making the lengths of the source array and the print array the same
+r_s(r_s <= 143) = [];
+r_p(r_p <= 143) = [];
+
+% Making the lengths of the source array and the print array the same
     if length(r_s)<=length(r_p)
         r_p=r_p(1:length(r_s));
     elseif length(r_s)>=length(r_p)

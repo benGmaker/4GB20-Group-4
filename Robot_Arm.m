@@ -14,7 +14,7 @@ offsetX=0.0211;
 offsetZ=0.2538;
 
 z_pickup = 24;      % Pickup height of the bolts
-z_moving = 40;      % Safe moving height over the bolts, even with bolt clamped
+z_moving = 50;      % Safe moving height over the bolts, even with bolt clamped
 
 pause_bolt=0.5;     % The pause above a bolt in seconds
 pause_end=1;        % The pause at the end in seconds
