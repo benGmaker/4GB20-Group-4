@@ -25,8 +25,8 @@ classdef ArmPos
         %}
         %
         %normal constraints
-        phiXmin = 0.2;
-        phiXmax = pi/2-0.1;
+        phiXmin = -0.2;
+        phiXmax = pi/2+0.1;
         phiZmin = -0.4;
         phiZmax = 0.3;
         phi1min = -pi*3/4;
