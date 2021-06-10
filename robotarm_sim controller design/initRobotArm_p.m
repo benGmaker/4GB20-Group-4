@@ -3,9 +3,9 @@ Tsim = 10;
 fs = 2048;
 Ts = 1/fs;
 
-stepX = 0;
-stepZ = 0;
-stepR = 0.5;
+stepX = 0.3; %recommended +- 0.3 
+stepZ = 0; %+-0.15
+stepR = 0;%+-0.79
 
 nSamplesForVisualization = 200;
 initialAngleKrukX = 0.809091366467325; % [rad]
