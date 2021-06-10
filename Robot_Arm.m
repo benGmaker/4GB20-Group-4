@@ -23,10 +23,10 @@ pause_end=1;        % The pause at the end in seconds
 alpha = 90; % physical robot
 beta = 0; % offset from center line of the plate (calibration line) (minus for offset to the source grid)
 
-armax=7;            % Maximum acceleration r direction in mm/s^2
-athetamax=9;        % Maximum acceleration theta direction in mm/s^2
-azmax=7;            % Maximum acceleration z direction in mm/s^2
-vmax=50;            % Maximum velocity in mm/s
+armax=25;            % Maximum acceleration r direction in mm/s^2
+athetamax=35;        % Maximum acceleration theta direction in mm/s^2
+azmax=25;            % Maximum acceleration z direction in mm/s^2
+vmax=100;            % Maximum velocity in mm/s
 
 %% Calibration
 calpos(1) = ArmPos;
