@@ -1,10 +1,10 @@
 clc; %close all;
-dis_R = load('dis_R_1.mat');
-dis_X = load('dis_X_1.mat');
-dis_Z = load('dis_Z_1.mat');
-meas_R = load('meas_R_1.mat');
-meas_X = load('meas_X_1.mat');
-meas_Z = load('meas_Z_1.mat');
+dis_R = load('dis_R.mat');
+dis_X = load('dis_X.mat');
+dis_Z = load('dis_Z.mat');
+meas_R = load('meas_R.mat');
+meas_X = load('meas_X.mat');
+meas_Z = load('meas_Z.mat');
 
 %% Read output
 meas_R_dat = meas_R.ans(2,:);
@@ -63,7 +63,6 @@ grid on
 nexttile;
 semilogx(f_R, phase_S_R)
 hold on
-plot(linspace(1e1,1e4,length(f_R)),linspace(-180,-180,length(f_R)))
 xlabel('Frequency [Hz]')
 ylabel('Phase [deg]')
 ylim([-200,200])
@@ -73,7 +72,6 @@ grid on
 nexttile;
 semilogx(f_X, phase_S_X)
 hold on
-plot(linspace(1e1,1e4,length(f_X)),linspace(-180,-180,length(f_X)))
 xlabel('Frequency [Hz]')
 ylim([-200,200])
 xlim([f_R(1), f_R(end)])
@@ -82,7 +80,6 @@ grid on
 nexttile;
 semilogx(f_Z, phase_S_Z)
 hold on
-plot(linspace(1e1,1e4,length(f_Z)),linspace(-180,-180,length(f_Z)))
 xlabel('Frequency [Hz]')
 ylim([-200,200])
 xlim([f_R(1), f_R(end)])
@@ -113,7 +110,6 @@ grid on
 nexttile;
 semilogx(f_R, phase_R)
 hold on
-% plot(linspace(1e1,1e4,length(f_R)),linspace(-180,-180,length(f_R)))
 xlabel('Frequency [Hz]')
 ylabel('Phase [deg]')
 ylim([-200,200])
@@ -123,7 +119,6 @@ grid on
 nexttile;
 semilogx(f_X, phase_X)
 hold on
-% plot(linspace(1e1,1e4,length(f_X)),linspace(-180,-180,length(f_X)))
 xlabel('Frequency [Hz]')
 ylim([-200,200])
 xlim([f_R(1), f_R(end)])
@@ -132,7 +127,6 @@ grid on
 nexttile;
 semilogx(f_Z, phase_Z)
 hold on
-% plot(linspace(1e1,1e4,length(f_Z)),linspace(-180,-180,length(f_Z)))
 xlabel('Frequency [Hz]')
 ylim([-200,200])
 xlim([f_R(1), f_R(end)])

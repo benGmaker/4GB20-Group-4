@@ -1,23 +1,18 @@
 clc; %close all;
-dis_R = load('dis_R_1.mat');
-dis_X = load('dis_X_1.mat');
-dis_Z = load('dis_Z_1.mat');
-meas_R = load('meas_R_1.mat');
-meas_X = load('meas_X_1.mat');
-meas_Z = load('meas_Z_1.mat');
+load('dis_meas_RXZ_WN_sin.mat');
 
 %% Read output
-meas_R_dat = meas_R.ans(2,:);
-meas_X_dat = meas_X.ans(2,:);
-meas_Z_dat = meas_Z.ans(2,:);
+meas_R_dat = meas_R.data;
+meas_X_dat = meas_X.data;
+meas_Z_dat = meas_Z.data;
 
-dis_R_dat = dis_R.ans(2,:);
-dis_X_dat = dis_X.ans(2,:);
-dis_Z_dat = dis_Z.ans(2,:);
+dis_R_dat = dis_R.data;
+dis_X_dat = dis_X.data;
+dis_Z_dat = dis_Z.data;
 
 %% TF-estimate
 fs = 4096;
-nfft = 4096;
+nfft = 2048;
 [S_R, f_R] = tfestimate(dis_R_dat, meas_R_dat, hann(nfft), [], nfft, fs);
 [S_X, f_X] = tfestimate(dis_X_dat, meas_X_dat, hann(nfft), [], nfft, fs);
 [S_Z, f_Z] = tfestimate(dis_Z_dat, meas_Z_dat, hann(nfft), [], nfft, fs);
