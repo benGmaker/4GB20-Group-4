@@ -1,11 +1,11 @@
 function [coords] = fcn_acceleration(pospath,aRmax,aXmax,aZmax,vmax,fs,pause_bolt,pause_end)
 % The naming in this function is incorrect, but it still fullfills its
 % function. R=r, X=theta, Z=z
-% 
-% aRmax=5;    % mm/s^2
+
+% aRmax=50;    % mm/s^2
 % aXmax=5;    % mm/s^2
-% aZmax=5;    % mm/s^2
-% vmax=20;    % mm/s
+% aZmax=50;    % mm/s^2
+% vmax=50;    % mm/s
 % pospath=CoordinatePath;
 
 amax=[aRmax aXmax aZmax];
@@ -28,7 +28,7 @@ for i=1:length(pospath)-1
     else
     if max_L==1
         k=sign(L(1));
-        m=sign(L(2))*frac_L(2)/frac_L(1);
+        m=sign(L(2))*frac_L(2)/frac_L(1)*aRmax^2/aXmax^2;
         n=sign(L(3))*frac_L(3)/frac_L(1);
     elseif max_L==2
         k=sign(L(1))*frac_L(1)/frac_L(2);
@@ -36,7 +36,7 @@ for i=1:length(pospath)-1
         n=sign(L(3))*frac_L(3)/frac_L(2);
     elseif max_L==3
         k=sign(L(1))*frac_L(1)/frac_L(3);
-        m=sign(L(2))*frac_L(2)/frac_L(3);
+        m=sign(L(2))*frac_L(2)/frac_L(3)*aRmax^2/aZmax^2;
         n=sign(L(3));
     end
 
@@ -48,9 +48,9 @@ for i=1:length(pospath)-1
     else
         t_flat=(L(max_L)-2*L_RXZ(max_L))/vmax;
         t=2*t_max+t_flat;
-        aR=[k*aRmax*ones(1,round(t_max/2*fs)) zeros(1,round(t_flat*fs)) k*-aRmax*ones(1,round(t_max/2*fs))];
-        aX=[m*aXmax*ones(1,round(t_max/2*fs)) zeros(1,round(t_flat*fs)) m*-aXmax*ones(1,round(t_max/2*fs))];
-        aZ=[n*aZmax*ones(1,round(t_max/2*fs)) zeros(1,round(t_flat*fs)) n*-aZmax*ones(1,round(t_max/2*fs))];
+        aR=[k*aRmax*ones(1,round(t_max*fs)) zeros(1,round(t_flat*fs)) k*-aRmax*ones(1,round(t_max*fs))];
+        aX=[m*aXmax*ones(1,round(t_max*fs)) zeros(1,round(t_flat*fs)) m*-aXmax*ones(1,round(t_max*fs))];
+        aZ=[n*aZmax*ones(1,round(t_max*fs)) zeros(1,round(t_flat*fs)) n*-aZmax*ones(1,round(t_max*fs))];
     end
     end
     z=length(xR)-1;
@@ -67,5 +67,4 @@ for i=1:length(pospath)-1
     solenoid=[solenoid pospath(4,i)*ones(1,length(aR))];
 end
 coords=[xR xR(length(xR))*ones(1,round(pause_end*fs));xX  xX(length(xX))*ones(1,round(pause_end*fs));xZ  xZ(length(xZ))*ones(1,round(pause_end*fs));solenoid zeros(1,round(pause_end*fs))];
-
 end

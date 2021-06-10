@@ -23,10 +23,10 @@ pause_end=1;        % The pause at the end in seconds
 alpha = 90; % physical robot
 beta = 0; % offset from center line of the plate (calibration line) (minus for offset to the source grid)
 
-armax=25;            % Maximum acceleration r direction in mm/s^2
-athetamax=35;        % Maximum acceleration theta direction in mm/s^2
-azmax=25;            % Maximum acceleration z direction in mm/s^2
-vmax=100;            % Maximum velocity in mm/s
+armax=50;            % Maximum acceleration r direction in mm/s^2
+athetamax=2;        % Maximum acceleration theta direction in mm/s^2
+azmax=50;            % Maximum acceleration z direction in mm/s^2
+vmax=50;            % Maximum velocity in mm/s
 
 %% Calibration
 calpos(1) = ArmPos;
@@ -83,6 +83,11 @@ for i=1:length(posArray)
     phiX(i) = pi/2 - posArray(i).phiX;
     phiZ(i) = posArray(i).phiZ;
 end
+
+phiR=[phiR(1)*ones(1,15*fs) phiR];
+phiX=[phiX(1)*ones(1,15*fs) phiX];
+phiZ=[phiZ(1)*ones(1,15*fs) phiZ];
+solenoid=[solenoid(1)*ones(1,15*fs) solenoid];
 
 % Time vector
 t = 0:1/fs:(length(phiX)-1)/fs;
